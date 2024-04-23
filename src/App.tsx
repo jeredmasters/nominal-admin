@@ -9,6 +9,18 @@ import { dataProvider } from "./dataProvider";
 import { authProvider } from "./authProvider";
 import { Layout, Login } from "./layout";
 import { Dashboard } from "./dashboard";
+import { ShowOrganisation } from "./resources/organisations/show-organisation";
+import { Route } from "react-router-dom";
+import { ListOrganisations } from "./resources/organisations/list-organisations";
+import { ShowVoter } from "./resources/voters/show-voter";
+import { CreateElection } from "./resources/elections/create-election";
+import { ListCandidates } from "./resources/candidates/list-candidates";
+import { ShowCandidate } from "./resources/candidates/show-candidate";
+import { ShowElection } from "./resources/elections/show-election";
+import { ListVoters } from "./resources/voters/list-voter";
+import { ListElections } from "./resources/elections/list-elections";
+import { CreateVoter } from "./resources/voters/create-voter";
+import { CreateCandidate } from "./resources/candidates/create-candidate";
 
 export const App = () => (
   <Admin
@@ -20,37 +32,47 @@ export const App = () => (
   >
     <Resource
       name="elections"
-      list={ListGuesser}
+      list={ListElections}
       edit={EditGuesser}
-      show={ShowGuesser}
+      show={ShowElection}
+      create={CreateElection}
+      recordRepresentation={(record) => record.label}
     />
 
     <Resource
       name="organisations"
-      list={ListGuesser}
+      list={ListOrganisations}
       edit={EditGuesser}
-      show={ShowGuesser}
-    />
+      show={ShowOrganisation}
+      recordRepresentation={(record) => record.label}
+    ></Resource>
     <Resource
       name="voters"
-      list={ListGuesser}
+      list={ListVoters}
       edit={EditGuesser}
-      show={ShowGuesser}
-    />
-    <Resource
-      name="elections"
-      list={ListGuesser}
-      edit={EditGuesser}
-      show={ShowGuesser}
+      show={ShowVoter}
+      create={CreateVoter}
+      recordRepresentation={(record) =>
+        record.first_name + " " + record.last_name
+      }
     />
     <Resource
       name="candidates"
-      list={ListGuesser}
+      list={ListCandidates}
       edit={EditGuesser}
-      show={ShowGuesser}
+      show={ShowCandidate}
+      create={CreateCandidate}
+      recordRepresentation={(record) => record.label}
     />
     <Resource
       name="enrolments"
+      list={ListGuesser}
+      edit={EditGuesser}
+      show={ShowGuesser}
+      recordRepresentation={(record) => record.label}
+    />
+    <Resource
+      name="email-tokens"
       list={ListGuesser}
       edit={EditGuesser}
       show={ShowGuesser}

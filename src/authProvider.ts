@@ -32,9 +32,9 @@ export const authProvider: AuthProvider = {
   },
   logout: () => {
     console.log("LOGOUT")
-    localStorage.removeItem("admin_user_id");
-    localStorage.removeItem("admin_public_key");
-    localStorage.removeItem("admin_secret_key");
+    // localStorage.removeItem("admin_user_id");
+    // localStorage.removeItem("admin_public_key");
+    // localStorage.removeItem("admin_secret_key");
 
     return Promise.resolve();
   },

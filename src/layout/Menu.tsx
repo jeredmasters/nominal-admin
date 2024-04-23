@@ -20,7 +20,6 @@ import SubMenu from "./SubMenu";
 import OrderIcon from "@mui/icons-material/AttachMoney";
 import ProductIcon from "@mui/icons-material/Collections";
 import InvoiceIcon from "@mui/icons-material/LibraryBooks";
-import ReviewIcon from "@mui/icons-material/Comment";
 import CategoryIcon from "@mui/icons-material/Bookmark";
 import VisitorIcon from "@mui/icons-material/People";
 
@@ -77,18 +76,10 @@ export const Menu = ({ dense = false }: MenuProps) => {
           onPointerEnterCapture={undefined}
           onPointerLeaveCapture={undefined}
         />
-      </SubMenu>
-      <SubMenu
-        handleToggle={() => handleToggle("menuCatalog")}
-        isOpen={state.menuCatalog}
-        name="Elections"
-        icon={<ProductIcon />}
-        dense={dense}
-      >
         <MenuItemLink
           to="/elections"
           state={{ _scrollToTop: true }}
-          primaryText="Products"
+          primaryText="Elections"
           leftIcon={<ProductIcon />}
           dense={dense}
           onPointerEnterCapture={undefined}
@@ -103,51 +94,7 @@ export const Menu = ({ dense = false }: MenuProps) => {
           onPointerEnterCapture={undefined}
           onPointerLeaveCapture={undefined}
         />
-        <MenuItemLink
-          to="/enrollments"
-          state={{ _scrollToTop: true }}
-          primaryText="Enrollments"
-          leftIcon={<CategoryIcon />}
-          dense={dense}
-          onPointerEnterCapture={undefined}
-          onPointerLeaveCapture={undefined}
-        />
       </SubMenu>
-      <SubMenu
-        handleToggle={() => handleToggle("menuCustomers")}
-        isOpen={state.menuCustomers}
-        name="Sales"
-        icon={<VisitorIcon />}
-        dense={dense}
-      >
-        <MenuItemLink
-          to="/customers"
-          state={{ _scrollToTop: true }}
-          primaryText="Customers"
-          leftIcon={<VisitorIcon />}
-          dense={dense}
-          onPointerEnterCapture={undefined}
-          onPointerLeaveCapture={undefined}
-        />
-        <MenuItemLink
-          to="/segments"
-          state={{ _scrollToTop: true }}
-          primaryText="Segments"
-          leftIcon={<LabelIcon />}
-          dense={dense}
-          onPointerEnterCapture={undefined}
-          onPointerLeaveCapture={undefined}
-        />
-      </SubMenu>
-      <MenuItemLink
-        to="/reviews"
-        state={{ _scrollToTop: true }}
-        primaryText="Reviews"
-        leftIcon={<ReviewIcon />}
-        dense={dense}
-        onPointerEnterCapture={undefined}
-        onPointerLeaveCapture={undefined}
-      />
     </Box>
   );
 };
