@@ -2,6 +2,7 @@ import jsonServerProvider from "ra-data-json-server";
 import simpleRestProvider from 'ra-data-json-server';
 import { fetchUtils } from "react-admin";
 import jwt from 'jwt-encode';
+import { URL_BASE } from "./config";
 
 
 export const httpClient = (url: string, options: fetchUtils.Options = {}) => {
@@ -23,7 +24,7 @@ export const httpClient = (url: string, options: fetchUtils.Options = {}) => {
   }
   return fetchUtils.fetchJson(url, options);
 };
-export const dataProvider = simpleRestProvider('http://localhost:4001/auth', httpClient);
+export const dataProvider = simpleRestProvider(URL_BASE + '/auth', httpClient);
 
 
 // export const dataProvider = jsonServerProvider(

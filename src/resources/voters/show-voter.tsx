@@ -10,10 +10,13 @@ import {
   ReferenceInput,
   TextInput,
   ListBase,
+  useRecordContext,
+  useGetOne,
+  useCreate,
 } from "react-admin";
 import { useParams } from "react-router-dom";
 import { IdField } from "../../components/IdField";
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button, Typography, Modal, Grid } from "@mui/material";
 import { useState } from "react";
 import { CreateModal } from "../../components/create-modal";
 import ForwardToInboxIcon from "@mui/icons-material/ForwardToInbox";
@@ -28,7 +31,18 @@ const Empty = ({ onClick }: { onClick: () => void }) => (
     </Button>
   </Box>
 );
-
+const style = {
+  position: "absolute" as "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  maxWidth: "100%",
+  bgcolor: "background.paper",
+  boxShadow: 24,
+  p: 4,
+  borderRadius: 3,
+};
 const EnrollModal = ({
   voter_id,
   open,
@@ -44,6 +58,7 @@ const EnrollModal = ({
       title="Enroll Voter"
       open={open}
       onClose={onClose}
+      resource="enrollments"
     >
       <TextInput
         source="voter_id"
@@ -56,8 +71,68 @@ const EnrollModal = ({
   );
 };
 
+const SendInviteButton = ({ voter_id }: { voter_id: string }) => {
+  const [modal, setModal] = useState<boolean>(false);
+  const [sent, setSent] = useState(false);
+  const { id } = useRecordContext();
+  const {
+    data: voter,
+    isLoading,
+    error,
+  } = useGetOne("voters", { id: voter_id });
+  const [create] = useCreate();
+
+  const handleSend = () => {
+    create(
+      "enrollments",
+      { data: { voter_id: voter_id, election_id: id } },
+      {
+        onSettled: () => {
+          setSent(true);
+        },
+      }
+    );
+  };
+
+  return (
+    <>
+      <Button onClick={() => setModal(true)} type="button">
+        Send Invite
+        <ForwardToInboxIcon />
+      </Button>
+      {modal ? (
+        <Modal open={true} onClose={() => setModal(false)}>
+          <Box sx={style}>
+            <Grid container>
+              <Grid item xs={12} mb={4}>
+                <Typography id="modal-modal-title" variant="h6">
+                  {sent ? "sent!" : "Send invite to user?"}
+                </Typography>
+              </Grid>
+              <Grid item xs={12} mb={4}>
+                <Typography variant="subtitle1">{voter.email}</Typography>
+              </Grid>
+              <Grid item xs={12}>
+                {!sent ? (
+                  <Button variant="contained" onClick={handleSend}>
+                    Send
+                  </Button>
+                ) : null}
+                <Button variant="outlined" onClick={() => setModal(false)}>
+                  Cancel
+                </Button>
+              </Grid>
+            </Grid>
+          </Box>
+        </Modal>
+      ) : null}
+    </>
+  );
+};
+
 export const ShowVoter = () => {
-  const [openModal, setOpenModal] = useState<boolean>(false);
+  const [enrolModal, setEnrolModal] = useState<boolean>(false);
+
   const { id } = useParams();
 
   if (!id) {
@@ -81,27 +156,25 @@ export const ShowVoter = () => {
             filter={{ voter_id: id }}
             sort={{ field: "closes_at", order: "DESC" }}
             exporter={false}
-            empty={<Empty onClick={() => setOpenModal(true)} />}
+            empty={<Empty onClick={() => setEnrolModal(true)} />}
             actions={
               <TopToolbar>
-                <Button onClick={() => setOpenModal(true)}>Enroll</Button>
+                <Button onClick={() => setEnrolModal(true)}>Enroll</Button>
               </TopToolbar>
             }
           >
-            <Datagrid rowClick="show">
+            <Datagrid>
               <IdField />
               <TextField source="label" />
               <DateField source="opens_at" />
               <TextField source="closes_at" />
-              <Button onClick={() => console.log("Asdf")}>
-                Send Invite <ForwardToInboxIcon />
-              </Button>
+              <SendInviteButton voter_id={id} />
             </Datagrid>
           </List>
           <EnrollModal
             voter_id={id}
-            open={openModal}
-            onClose={() => setOpenModal(false)}
+            open={enrolModal}
+            onClose={() => setEnrolModal(false)}
           />
         </TabbedShowLayout.Tab>
         <TabbedShowLayout.Tab label="Email Tokens">

@@ -21,6 +21,7 @@ export interface SModelProps extends PropsWithChildren {
   open: boolean;
   onClose: () => void;
   redirect: string;
+  resource: string;
 }
 export const CreateModal = ({
   open,
@@ -28,12 +29,13 @@ export const CreateModal = ({
   onClose,
   children,
   title,
+  resource,
 }: SModelProps) => {
   const [create] = useCreate();
   const navigate = useNavigate();
   const postSave = (data: any) => {
     create(
-      "enrollments",
+      resource,
       { data },
       {
         onSettled: () => {
@@ -45,20 +47,20 @@ export const CreateModal = ({
   };
   return (
     <Modal open={open} onClose={onClose}>
-      <CreateBase resource="enrollments">
-        <Box sx={style}>
-          <Grid container>
-            <Grid item xs={12}>
-              <Typography id="modal-modal-title" variant="h6" component="h2">
-                {title}
-              </Typography>
-            </Grid>
-            <Grid item xs={12}>
-              <SimpleForm onSubmit={postSave}>{children}</SimpleForm>
-            </Grid>
+      <Box sx={style}>
+        <Grid container>
+          <Grid item xs={12}>
+            <Typography id="modal-modal-title" variant="h6" component="h2">
+              {title}
+            </Typography>
           </Grid>
-        </Box>
-      </CreateBase>
+          <Grid item xs={12}>
+            <CreateBase resource={resource}>
+              <SimpleForm onSubmit={postSave}>{children}</SimpleForm>
+            </CreateBase>
+          </Grid>
+        </Grid>
+      </Box>
     </Modal>
   );
 };
