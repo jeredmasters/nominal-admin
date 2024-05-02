@@ -1,16 +1,31 @@
-import { List, SearchInput, TextInput } from "react-admin";
-import { VoterGrid } from "./datagrid-voter";
+import {
+  DateField,
+  List,
+  SearchInput,
+  TextField,
+  TextInput,
+} from "react-admin";
+import { OrgList } from "../../components/org-list";
+import { IdField } from "../../components/IdField";
 
-export const ListVoters = () => {
+export interface ListVotersProps {
+  election_id?: string;
+}
+export const ListVoters = ({ election_id }: ListVotersProps) => {
   return (
-    <List
+    <OrgList
+      resource="voters"
       perPage={100}
       filters={[
         <SearchInput source="q" alwaysOn />,
         <TextInput label="Email" source="email" alwaysOn />,
       ]}
+      filter={{ election_id }}
     >
-      <VoterGrid />
-    </List>
+      <IdField />
+      <TextField source="first_name" />
+      <TextField source="last_name" />
+      <DateField source="created_at" />
+    </OrgList>
   );
 };

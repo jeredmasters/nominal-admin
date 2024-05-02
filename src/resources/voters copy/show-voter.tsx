@@ -9,8 +9,10 @@ import {
   Datagrid,
   ReferenceInput,
   TextInput,
+  ListBase,
   useRecordContext,
   useGetOne,
+  useCreate,
 } from "react-admin";
 import { useParams } from "react-router-dom";
 import { IdField } from "../../components/IdField";
@@ -21,8 +23,6 @@ import ForwardToInboxIcon from "@mui/icons-material/ForwardToInbox";
 import CheckIcon from "@mui/icons-material/Check";
 import { httpClientAuth } from "../../app/dataProvider";
 import { getFormData } from "../../util";
-import { ListEmailTokens } from "../email-tokens/list-email-tokens";
-import { ShowButton } from "../../components/show-button";
 
 const Empty = ({ onClick }: { onClick: () => void }) => (
   <Box textAlign="center" m={1}>
@@ -170,7 +170,6 @@ export const ShowVoter = () => {
               <TextField source="label" />
               <DateField source="opens_at" />
               <TextField source="closes_at" />
-              <ShowButton />
               <SendInviteButton voter_id={id} />
             </Datagrid>
           </List>
@@ -181,7 +180,18 @@ export const ShowVoter = () => {
           />
         </TabbedShowLayout.Tab>
         <TabbedShowLayout.Tab label="Email Tokens">
-          <ListEmailTokens voter_id={id} />
+          <ListBase
+            resource="email-tokens"
+            filter={{ voter_id: id }}
+            sort={{ field: "created_at", order: "DESC" }}
+            exporter={false}
+          >
+            <Datagrid rowClick="show">
+              <IdField />
+              <DateField source="created_at" />
+              <TextField source="status" />
+            </Datagrid>
+          </ListBase>
         </TabbedShowLayout.Tab>
       </TabbedShowLayout>
     </Show>

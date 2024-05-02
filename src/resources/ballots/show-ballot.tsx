@@ -2,33 +2,32 @@ import {
   Show,
   TextField,
   DateField,
+  useRecordContext,
+  EditButton,
+  TopToolbar,
   TabbedShowLayout,
-  ListBase,
-  ReferenceField,
+  List,
+  CreateButton,
+  useGetOne,
 } from "react-admin";
 import { useParams } from "react-router-dom";
 import { IdField } from "../../components/IdField";
-import { EditButton } from "../../components/edit-button";
-import { ListElections } from "../elections/list-elections";
+import { ListCandidates } from "../candidates/list-candidates";
 
-export const ShowCandidate = () => {
+export const ShowBallot = () => {
   const { id } = useParams();
+
   return (
     <Show>
       <TabbedShowLayout>
-        <TabbedShowLayout.Tab label="Candidate">
+        <TabbedShowLayout.Tab label="Ballot">
           <IdField />
           <TextField source="label" />
           <DateField source="created_at" />
-          <ReferenceField
-            source="organisation_id"
-            reference="organisations"
-            link="show"
-          />
           <EditButton />
         </TabbedShowLayout.Tab>
-        <TabbedShowLayout.Tab label="Elections">
-          <ListElections />
+        <TabbedShowLayout.Tab label="Candidates">
+          <ListCandidates ballot_id={id} />
         </TabbedShowLayout.Tab>
       </TabbedShowLayout>
     </Show>

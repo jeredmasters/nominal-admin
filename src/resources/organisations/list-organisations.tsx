@@ -6,7 +6,7 @@ import { Button, Typography } from "@mui/material";
 
 export const ListOrganisations = () => {
   return (
-    <List perPage={100}>
+    <List resource="organisations" perPage={100}>
       <OrganisationGrid />
     </List>
   );

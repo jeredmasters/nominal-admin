@@ -1,10 +1,18 @@
-import { List, Datagrid, TextField, DateField } from "react-admin";
-import { ElectionGrid } from "./datagrid-election";
+import { TextField, DateField, TextInput } from "react-admin";
+import { OrgList } from "../../components/org-list";
+import { IdField } from "../../components/IdField";
 
 export const ListElections = () => {
   return (
-    <List perPage={100}>
-      <ElectionGrid />
-    </List>
+    <OrgList
+      resource="elections"
+      perPage={100}
+      filters={[<TextInput label="Label" source="label" alwaysOn />]}
+    >
+      <IdField />
+      <TextField source="first_name" />
+      <TextField source="last_name" />
+      <DateField source="created_at" />
+    </OrgList>
   );
 };

@@ -1,7 +1,7 @@
-import * as React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import PropTypes from "prop-types";
-import { useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import {
   Avatar,
@@ -16,48 +16,62 @@ import {
   required,
   TextInput,
   useTranslate,
-  useLogin,
   useNotify,
+  Loading,
 } from "react-admin";
 
 import Box from "@mui/material/Box";
+import { AUTH_STATUS, AuthContext } from "../context/auth.provider";
 
-const Login = () => {
+export const Login = () => {
   const [loading, setLoading] = useState(false);
   const translate = useTranslate();
 
   const notify = useNotify();
-  const login = useLogin();
-  const location = useLocation();
+  const { login, status } = React.useContext(AuthContext);
+  const navigate = useNavigate();
 
-  const handleSubmit = (auth: FormValues) => {
-    console.log(auth);
+  const navigateToDashboard = () => navigate("/organisations");
+
+  useEffect(() => {
+    if (status === AUTH_STATUS.AUTHENTICATED) {
+      navigateToDashboard();
+    }
+  }, [status]);
+
+  const handleSubmit = ({ email, password }: FormValues) => {
+    if (!email || !password) {
+      return false;
+    }
     setLoading(true);
-    login(
-      auth,
-      location.state ? (location.state as any).nextPathname : "/"
-    ).catch((error: Error) => {
-      setLoading(false);
-      notify(
-        typeof error === "string"
-          ? error
-          : typeof error === "undefined" || !error.message
-          ? "ra.auth.sign_in_error"
-          : error.message,
-        {
-          type: "error",
-          messageArgs: {
-            _:
-              typeof error === "string"
-                ? error
-                : error && error.message
-                ? error.message
-                : undefined,
-          },
-        }
-      );
-    });
+    login(email, password)
+      .then(navigateToDashboard)
+      .catch((error: Error) => {
+        setLoading(false);
+        notify(
+          typeof error === "string"
+            ? error
+            : typeof error === "undefined" || !error.message
+            ? "ra.auth.sign_in_error"
+            : error.message,
+          {
+            type: "error",
+            messageArgs: {
+              _:
+                typeof error === "string"
+                  ? error
+                  : error && error.message
+                  ? error.message
+                  : undefined,
+            },
+          }
+        );
+      });
   };
+
+  if (status === AUTH_STATUS.VERIFYING) {
+    return <Loading />;
+  }
 
   return (
     <Form
@@ -146,8 +160,6 @@ Login.propTypes = {
   authProvider: PropTypes.func,
   previousRoute: PropTypes.string,
 };
-
-export default Login;
 
 interface FormValues {
   email?: string;

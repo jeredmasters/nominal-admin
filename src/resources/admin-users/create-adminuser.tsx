@@ -11,9 +11,9 @@ import {
 } from "react-admin";
 import { Button, Typography } from "@mui/material";
 
-export const CreateCandidate = () => (
+export const CreateAdminUser = () => (
   <Create redirect="show">
-    <Typography variant="h4">Create Candidate</Typography>
+    <Typography variant="h4">Create AdminUser</Typography>
 
     <SimpleForm>
       <TextInput source="label" validate={[required()]} fullWidth />

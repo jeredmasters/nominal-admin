@@ -1,10 +1,15 @@
-import { List } from "react-admin";
-import { CandidateGrid } from "./datagrid-candidate";
+import { OrgList } from "../../components/org-list";
+import { TextField } from "react-admin";
+import { IdField } from "../../components/IdField";
 
-export const ListCandidates = () => {
+interface ListCandidatesProps {
+  ballot_id?: string;
+}
+export const ListCandidates = ({ ballot_id }: ListCandidatesProps) => {
   return (
-    <List perPage={100}>
-      <CandidateGrid />
-    </List>
+    <OrgList resource="candidates" perPage={100} filter={{ ballot_id }}>
+      <IdField />
+      <TextField source="label" />
+    </OrgList>
   );
 };

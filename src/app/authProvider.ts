@@ -1,18 +1,18 @@
 import { AuthProvider, HttpError } from "react-admin";
-import data from "./users.json";
+import data from "../users.json";
 import axios from "axios";
-import { URL_BASE } from "./config";
-import { dataProvider, httpClient } from "./dataProvider";
+import { API_BASE } from "../config";
+import { httpClientAuth } from "./dataProvider";
 
 
 /**
  * This authProvider is only for test purposes. Don't use it in production.
  */
-export const authProvider: AuthProvider = {
+export const authProvider_: AuthProvider = {
   login: ({ username, password }) => {
 
     return axios({
-      url: URL_BASE + "/login",
+      url: API_BASE + "/login",
       method: 'post',
       data: {
         email: username,
@@ -48,7 +48,7 @@ export const authProvider: AuthProvider = {
       throw new Error("Not authenticated");
     }
 
-    const response = await httpClient(URL_BASE + "/auth/status");
+    const response = await httpClientAuth("/status");
 
     if (response.status !== 200) {
       throw new Error("Auth Expired");
@@ -65,4 +65,24 @@ export const authProvider: AuthProvider = {
   },
 };
 
-export default authProvider;
+export const authProvider2 = {
+  login: () => {
+    return Promise.resolve();
+  },
+  logout: () => {
+    localStorage.removeItem('username');
+    return Promise.resolve();
+  },
+  checkAuth: () =>
+    localStorage.getItem('username') ? Promise.resolve() : Promise.reject(),
+  checkError: () => {
+    return Promise.resolve();
+  },
+  getIdentity: () =>
+    Promise.resolve({
+      id: 'user',
+      fullName: 'John Doe',
+    }),
+  getPermissions: () => Promise.resolve(''),
+};
+

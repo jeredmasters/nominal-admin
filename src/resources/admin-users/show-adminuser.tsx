@@ -2,21 +2,20 @@ import {
   Show,
   TextField,
   DateField,
+  EditButton,
   TabbedShowLayout,
   ListBase,
   ReferenceField,
 } from "react-admin";
 import { useParams } from "react-router-dom";
 import { IdField } from "../../components/IdField";
-import { EditButton } from "../../components/edit-button";
-import { ListElections } from "../elections/list-elections";
 
-export const ShowCandidate = () => {
+export const ShowAdminUser = () => {
   const { id } = useParams();
   return (
     <Show>
       <TabbedShowLayout>
-        <TabbedShowLayout.Tab label="Candidate">
+        <TabbedShowLayout.Tab label="AdminUser">
           <IdField />
           <TextField source="label" />
           <DateField source="created_at" />
@@ -26,9 +25,6 @@ export const ShowCandidate = () => {
             link="show"
           />
           <EditButton />
-        </TabbedShowLayout.Tab>
-        <TabbedShowLayout.Tab label="Elections">
-          <ListElections />
         </TabbedShowLayout.Tab>
       </TabbedShowLayout>
     </Show>

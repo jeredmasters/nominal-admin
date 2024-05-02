@@ -1,29 +1,22 @@
 import {
   Show,
-  SimpleShowLayout,
   TextField,
   DateField,
-  RichTextField,
-  useRecordContext,
   EditButton,
-  TopToolbar,
   TabbedShowLayout,
-  useShowContext,
-  List,
-  BooleanField,
-  Datagrid,
-  CreateButton,
 } from "react-admin";
 import { Button, Typography } from "@mui/material";
 import { useParams } from "react-router-dom";
 import { IdField } from "../../components/IdField";
-import { CandidateGrid } from "../candidates/datagrid-candidate";
+import { ListVoters } from "../voters/list-voter";
+import { OrgList } from "../../components/org-list";
+import { ListCandidates } from "../candidates/list-candidates";
 
 export const ShowOrganisation = () => {
-  const { id } = useParams();
+  const { organisation_id } = useParams();
   return (
-    <Show>
-      <TabbedShowLayout>
+    <Show resource="organisations" id={organisation_id}>
+      <TabbedShowLayout syncWithLocation={false}>
         <TabbedShowLayout.Tab label="Organisation">
           <IdField />
           <TextField source="label" />
@@ -31,54 +24,22 @@ export const ShowOrganisation = () => {
           <EditButton />
         </TabbedShowLayout.Tab>
         <TabbedShowLayout.Tab label="Elections">
-          <Button color="primary" onClick={(v) => console.log(v)}>
-            New Election
-          </Button>
-          <List
+          <OrgList
             resource="elections"
-            filter={{ organisation_id: id }}
             sort={{ field: "closes_at", order: "DESC" }}
             exporter={false}
           >
-            <Datagrid rowClick="show">
-              <IdField />
-              <TextField source="label" />
-              <DateField source="opens_at" />
-              <TextField source="closes_at" />
-            </Datagrid>
-          </List>
+            <IdField />
+            <TextField source="label" />
+            <DateField source="opens_at" />
+            <TextField source="closes_at" />
+          </OrgList>
         </TabbedShowLayout.Tab>
         <TabbedShowLayout.Tab label="Voters">
-          <List
-            resource="voters"
-            filter={{ organisation_id: id }}
-            sort={{ field: "first_name", order: "ASC" }}
-            exporter={false}
-            actions={
-              <TopToolbar>
-                <CreateButton
-                  resource="voters"
-                  state={{ record: { organisation_id: id } }}
-                />
-              </TopToolbar>
-            }
-          >
-            <Datagrid rowClick="show">
-              <IdField />
-              <TextField source="first_name" />
-              <TextField source="last_name" />
-            </Datagrid>
-          </List>
+          <ListVoters />
         </TabbedShowLayout.Tab>
         <TabbedShowLayout.Tab label="Candidates">
-          <List
-            resource="candidates"
-            filter={{ organisation_id: id }}
-            sort={{ field: "label", order: "ASC" }}
-            exporter={false}
-          >
-            <CandidateGrid />
-          </List>
+          <ListCandidates />
         </TabbedShowLayout.Tab>
       </TabbedShowLayout>
     </Show>
