@@ -21,6 +21,17 @@ export const App = () => {
   }
   return (
     <Routes>
+      <Route
+        index
+        element={
+          <Redirect
+            to={
+              status === AUTH_STATUS.AUTHENTICATED ? "/organisations" : "/login"
+            }
+          />
+        }
+      />
+
       <Route path="/login" element={<Login />} />
       <Route path="/logout" element={<Logout />} />
 

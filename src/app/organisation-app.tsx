@@ -56,6 +56,7 @@ export const OrganisationApp = () => (
   >
     <CustomRoutes>
       <Route path="" element={<IndexPage />} />
+      <Route path="/" element={<IndexPage />} />
       <Route path="/show" element={<ShowOrganisation />} />
     </CustomRoutes>
     <Resource
