@@ -11,6 +11,7 @@ import {
   TextInput,
   useRecordContext,
   useGetOne,
+  NumberField,
 } from "react-admin";
 import { useParams } from "react-router-dom";
 import { IdField } from "../../components/IdField";
@@ -170,6 +171,9 @@ export const ShowVoter = () => {
               <TextField source="label" />
               <DateField source="opens_at" />
               <TextField source="closes_at" />
+              <NumberField source="ballot_count" label="Ballots" />
+              <NumberField source="running_count" label="Candidates" />
+
               <ShowButton />
               <SendInviteButton voter_id={id} />
             </Datagrid>

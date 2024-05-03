@@ -1,4 +1,4 @@
-import { TextField, DateField, TextInput } from "react-admin";
+import { TextField, DateField, TextInput, NumberField } from "react-admin";
 import { OrgList } from "../../components/org-list";
 import { IdField } from "../../components/IdField";
 
@@ -10,9 +10,9 @@ export const ListElections = () => {
       filters={[<TextInput label="Label" source="label" alwaysOn />]}
     >
       <IdField />
-      <TextField source="first_name" />
-      <TextField source="last_name" />
-      <DateField source="created_at" />
+      <TextField source="label" />
+      <TextField source="closes_at" />
+      <NumberField source="ballot_count" title="Ballots" />
     </OrgList>
   );
 };

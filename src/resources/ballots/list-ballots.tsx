@@ -15,6 +15,7 @@ export const ListBallots = ({ election_id }: ListBallots) => {
     >
       <IdField />
       <TextField source="label" />
+      <TextField source="running_count" title="Candidates" />
     </OrgList>
   );
 };

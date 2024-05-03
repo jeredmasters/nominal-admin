@@ -28,7 +28,11 @@ export const CreateEmailToken = () => {
         defaultValue={voter ? voter.email : null}
       />
 
-      <ReferenceInput source="election_id" reference="elections" />
+      <ReferenceInput
+        source="election_id"
+        reference="elections"
+        filter={{ voter_id }}
+      />
 
       <TextInput source="voter_id" style={{ display: "none" }} />
     </OrgCreateForm>

@@ -11,6 +11,7 @@ import { IdField } from "../../components/IdField";
 import { ListVoters } from "../voters/list-voter";
 import { OrgList } from "../../components/org-list";
 import { ListCandidates } from "../candidates/list-candidates";
+import { ListElections } from "../elections/list-elections";
 
 export const ShowOrganisation = () => {
   const { organisation_id } = useParams();
@@ -24,16 +25,7 @@ export const ShowOrganisation = () => {
           <EditButton />
         </TabbedShowLayout.Tab>
         <TabbedShowLayout.Tab label="Elections">
-          <OrgList
-            resource="elections"
-            sort={{ field: "closes_at", order: "DESC" }}
-            exporter={false}
-          >
-            <IdField />
-            <TextField source="label" />
-            <DateField source="opens_at" />
-            <TextField source="closes_at" />
-          </OrgList>
+          <ListElections />
         </TabbedShowLayout.Tab>
         <TabbedShowLayout.Tab label="Voters">
           <ListVoters />
