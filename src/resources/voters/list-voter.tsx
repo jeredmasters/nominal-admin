@@ -21,6 +21,7 @@ export const ListVoters = ({ election_id }: ListVotersProps) => {
         <TextInput label="Email" source="email" alwaysOn />,
       ]}
       filter={{ election_id }}
+      omitOrgFilter={true}
     >
       <IdField />
       <TextField source="first_name" />

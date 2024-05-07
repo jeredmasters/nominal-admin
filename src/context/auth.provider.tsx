@@ -5,6 +5,7 @@ import React, {
   PropsWithChildren,
   useCallback,
   useContext,
+  useMemo,
 } from "react";
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 import jwt from "jwt-encode";
@@ -12,13 +13,21 @@ import { IAdminUser } from "../domain/admin-user";
 import { API_BASE } from "../config";
 import { LocalStorageContext } from "./localstorage.provider";
 import { IConfig } from "../domain/config";
+import { DataProvider } from "react-admin";
+
 export enum AUTH_STATUS {
   VERIFYING = "VERIFYING",
   AUTHENTICATED = "AUTHENTICATED",
   UNAUTHENTICATED = "UNAUTHENTICATED",
 }
+
 export interface IAuthContext {
-  fetch: <T = any>(config: AxiosRequestConfig<T>) => Promise<T>;
+  fetch:
+    | (<T = any>(
+        url: string,
+        config?: DPRequestOptions
+      ) => Promise<DPResponse<T>>)
+    | null;
   login: (email: string, password: string) => Promise<any>;
   logout: () => void;
   user: IAdminUser | null;
@@ -29,10 +38,33 @@ export interface IAuthContext {
 
 export interface HttpRequest {}
 
+export interface DPRequestOptions {
+  method?: string;
+  headers?: any;
+  body?: any;
+  multipartFormData?: boolean;
+}
+
+export interface DPResponse<T = any> {
+  status: number;
+  headers: Headers | any;
+  body: string;
+  json: T;
+}
+
+const getData = (body?: FormData | any) => {
+  if (body && body instanceof FormData) {
+    var object: any = {};
+    body.forEach(function (value, key) {
+      object[key] = value;
+    });
+    return object;
+  }
+  return body;
+};
+
 export const AuthContext = createContext<IAuthContext>({
-  fetch: (config: AxiosRequestConfig<any>) => {
-    throw new Error("Not authorized");
-  },
+  fetch: null,
   login: (email: string, password: string) => Promise.resolve(),
   logout: () => null,
   user: null,
@@ -56,22 +88,43 @@ export const AuthProvider: React.FC<PropsWithChildren> = (props) => {
     delValue("admin_secret_key");
   };
 
-  const fetch = useCallback(
-    (config: AxiosRequestConfig<any>) => {
+  const fetch = useMemo(() => {
+    if (!publicKey || !secretKey) {
+      return null;
+    }
+    return (url: string, config?: DPRequestOptions) => {
+      if (!config) {
+        config = {
+          method: "get",
+        };
+      }
       if (!config.headers) {
         config.headers = {};
       }
-      config.headers["Accept"] = "application/json";
-      config.url = API_BASE + config.url;
+
+      if (config.multipartFormData !== true) {
+        config.headers["Accept"] = "application/json";
+        config.headers["Content-Type"] = "application/json";
+      }
 
       if (publicKey && secretKey) {
         var token = jwt({ public_key: publicKey }, secretKey);
         config.headers["Authorization"] = `Bearer ${token}`;
       }
-      return axios(config).then((response) => response.data);
-    },
-    [publicKey, secretKey]
-  );
+      return axios({
+        url: API_BASE + "/auth" + url,
+        data: config.body,
+        ...config,
+      }).then(
+        (response): DPResponse => ({
+          body: response.data,
+          json: response.data,
+          status: response.status,
+          headers: response.headers,
+        })
+      );
+    };
+  }, [publicKey, secretKey]);
 
   const login = (email: string, password: string) => {
     return axios({
@@ -96,19 +149,13 @@ export const AuthProvider: React.FC<PropsWithChildren> = (props) => {
   };
 
   useEffect(() => {
-    if (publicKey && secretKey) {
-      fetch({
-        method: "get",
-        url: "/auth/status",
-      })
-        .then((user) => {
-          setUser(user);
+    if (fetch) {
+      fetch("/status")
+        .then((r) => {
+          setUser(r.json);
           setAuthAt(new Date());
           setStatus(AUTH_STATUS.AUTHENTICATED);
-          fetch({
-            method: "get",
-            url: "/auth/config",
-          }).then(setConfig);
+          fetch("/config").then((r) => setConfig(r.json));
         })
         .catch(() => logout());
     } else {
@@ -118,7 +165,15 @@ export const AuthProvider: React.FC<PropsWithChildren> = (props) => {
 
   return (
     <AuthContext.Provider
-      value={{ fetch, login, logout, user, authAt, status, config }}
+      value={{
+        fetch,
+        login,
+        logout,
+        user,
+        authAt,
+        status,
+        config,
+      }}
     >
       {props.children}
     </AuthContext.Provider>

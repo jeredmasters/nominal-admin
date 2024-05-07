@@ -24,6 +24,7 @@ import { httpClientAuth } from "../../app/dataProvider";
 import { getFormData } from "../../util";
 import { ListEmailTokens } from "../email-tokens/list-email-tokens";
 import { ShowButton } from "../../components/show-button";
+import { OrgList } from "../../components/org-list";
 
 const Empty = ({ onClick }: { onClick: () => void }) => (
   <Box textAlign="center" m={1}>
@@ -151,7 +152,15 @@ export const ShowVoter = () => {
           <TextField source="last_name" />
           <TextField source="email" />
           <DateField source="created_at" />
-          <EditButton />
+          <OrgList
+            resource="voter-tags"
+            perPage={100}
+            filter={{ voter_id: id }}
+            omitOrgFilter={true}
+          >
+            <TextField source="key" />
+            <TextField source="value" />
+          </OrgList>
         </TabbedShowLayout.Tab>
         <TabbedShowLayout.Tab label="Elections">
           <List

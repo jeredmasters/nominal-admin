@@ -20,9 +20,6 @@ export const OrgCreateForm = ({
   resource,
   children,
 }: OrgCreateFormProps) => {
-  const { record } = useCreateController();
-  const { voter_id } = record || {};
-  const { data: voter } = useGetOne("voters", { id: voter_id });
   const showPath = useShowPath();
   const redirect = useRedirect();
   const [create] = useCreate();

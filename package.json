@@ -13,11 +13,13 @@
     "axios": "^1.6.8",
     "jsonwebtoken": "^9.0.2",
     "jwt-encode": "^1.0.1",
+    "papaparse": "^5.4.1",
     "ra-data-json-server": "^4.16.15",
     "ra-data-simple-rest": "^4.16.15",
     "react": "^18.2.0",
     "react-admin": "^4.16.15",
     "react-dom": "^18.2.0",
+    "react-select": "^5.8.0",
     "recharts": "^2.12.5",
     "simple-jwt": "^1.0.3"
   },
@@ -25,6 +27,7 @@
     "@types/jsonwebtoken": "^9.0.6",
     "@types/jwt-encode": "^1.0.3",
     "@types/node": "^18.16.1",
+    "@types/papaparse": "^5.3.14",
     "@types/react": "^18.0.22",
     "@types/react-dom": "^18.0.7",
     "@typescript-eslint/eslint-plugin": "^5.60.1",
@@ -35,6 +38,7 @@
     "eslint-plugin-react": "^7.32.2",
     "eslint-plugin-react-hooks": "^4.6.0",
     "prettier": "^2.8.8",
+    "sass": "^1.77.0",
     "typescript": "^5.1.6",
     "vite": "^4.5.3"
   }
