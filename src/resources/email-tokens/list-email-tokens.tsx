@@ -1,22 +1,8 @@
-import {
-  DateField,
-  List,
-  SearchInput,
-  TextField,
-  TextInput,
-} from "react-admin";
-import { OrgList } from "../../components/org-list";
-import { IdField } from "../../components/IdField";
+import { SimpleTable } from "../../components/simple-table";
 
 export interface ListEmailTokensProps {
   voter_id?: string;
 }
 export const ListEmailTokens = ({ voter_id }: ListEmailTokensProps) => {
-  return (
-    <OrgList resource="email-tokens" perPage={100} filter={{ voter_id }}>
-      <IdField />
-      <DateField source="created_at" />
-      <TextField source="status" />
-    </OrgList>
-  );
+  return <SimpleTable resource="email-tokens" filter={{ voter_id }} />;
 };

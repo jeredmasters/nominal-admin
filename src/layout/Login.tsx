@@ -22,8 +22,10 @@ import {
 
 import Box from "@mui/material/Box";
 import { AUTH_STATUS, AuthContext } from "../context/auth.provider";
+import { useResource } from "../util";
 
 export const Login = () => {
+  useResource();
   const [loading, setLoading] = useState(false);
   const translate = useTranslate();
 

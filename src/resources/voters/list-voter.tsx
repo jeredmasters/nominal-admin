@@ -1,32 +1,19 @@
-import {
-  DateField,
-  List,
-  SearchInput,
-  TextField,
-  TextInput,
-} from "react-admin";
-import { OrgList } from "../../components/org-list";
-import { IdField } from "../../components/IdField";
+import { SimpleTable } from "../../components/simple-table";
+import { useParams } from "react-router-dom";
 
 export interface ListVotersProps {
   election_id?: string;
 }
 export const ListVoters = ({ election_id }: ListVotersProps) => {
+  const params = useParams();
+  if (!election_id) {
+    election_id = params.election_id;
+  }
   return (
-    <OrgList
+    <SimpleTable
       resource="voters"
-      perPage={100}
-      filters={[
-        <SearchInput source="q" alwaysOn />,
-        <TextInput label="Email" source="email" alwaysOn />,
-      ]}
       filter={{ election_id }}
-      omitOrgFilter={true}
-    >
-      <IdField />
-      <TextField source="first_name" />
-      <TextField source="last_name" />
-      <DateField source="created_at" />
-    </OrgList>
+      columns={["first_name", "last_name", "email"]}
+    />
   );
 };

@@ -24,7 +24,7 @@ export const LocalStorageContext = createContext<ILocalStorageContext>({
   delValue: (key: string) => null,
 });
 export const LocalStorageProvider: React.FC<PropsWithChildren> = (props) => {
-  const [store, setStore] = useState<IStore>({});
+  const [store, setStore] = useState<IStore>({ ...localStorage });
 
   const getValue = (key: string) => {
     if (key in store) {
@@ -36,7 +36,7 @@ export const LocalStorageProvider: React.FC<PropsWithChildren> = (props) => {
 
   const setValue = (key: string, value: string) => {
     localStorage.setItem(key, value);
-    setStore({ ...store, [key]: value });
+    setStore({ ...localStorage });
   };
 
   const delValue = (key: string) => {

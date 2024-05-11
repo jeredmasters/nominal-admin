@@ -30,13 +30,19 @@ import * as React from "react";
 import { Layout, LayoutProps } from "react-admin";
 import { MyAppBar } from "../layout/AppBar";
 import { OrganisationMenu } from "../layout/Menu";
-import { useParams } from "react-router-dom";
+import { useParams, Outlet } from "react-router-dom";
 import { CreateEmailToken } from "../resources/email-tokens/create-email-token";
 import { ShowEmailToken } from "../resources/email-tokens/show-email-token";
 import { AuthContext } from "../context/auth.provider";
+import { MyLayout } from "../layout/Layout";
+import { EditElection } from "../resources/elections/edit-election";
+import { ListProfiles } from "../resources/profiles/list-profiles";
+import { CreateProfile } from "../resources/profiles/create-profile";
+import { ShowProfile } from "../resources/profiles/show-profile";
+import { EditCandidate } from "../resources/candidates/edit-candidate";
 
 const OrganisationLayout = (props: LayoutProps) => {
-  return <Layout {...props} appBar={MyAppBar} menu={OrganisationMenu} />;
+  return <Layout {...props} appBar={MyAppBar} menu={OrganisationMenu as any} />;
 };
 
 const IndexPage = () => {
@@ -64,17 +70,22 @@ export const OrganisationApp = () => {
       layout={OrganisationLayout}
       loginPage={Login}
       dashboard={ListOrganisations}
-      basename="/organisations/list"
+      basename="/organisations/:organisation_id"
     >
+      <Outlet />
       <CustomRoutes>
         <Route path="" element={<IndexPage />} />
         <Route path="/" element={<IndexPage />} />
         <Route path="/show" element={<ShowOrganisation />} />
       </CustomRoutes>
       <Resource
+        name="organisations"
+        recordRepresentation={(record) => record.label}
+      />
+      <Resource
         name="elections"
         list={ListElections}
-        edit={EditGuesser}
+        edit={EditElection}
         show={ShowElection}
         create={CreateElection}
         recordRepresentation={(record) => record.label}
@@ -100,10 +111,22 @@ export const OrganisationApp = () => {
       <Resource
         name="candidates"
         list={ListCandidates}
-        edit={EditGuesser}
+        edit={EditCandidate}
         show={ShowCandidate}
         create={CreateCandidate}
-        recordRepresentation={(record) => record.label}
+        recordRepresentation={(record) =>
+          `${record.first_name} ${record.last_name}`
+        }
+      />{" "}
+      <Resource
+        name="profiles"
+        list={ListProfiles}
+        edit={EditGuesser}
+        show={ShowProfile}
+        create={CreateProfile}
+        recordRepresentation={(record) =>
+          `${record.version} ${record.last_name}`
+        }
       />
       <Resource
         name="enrolments"

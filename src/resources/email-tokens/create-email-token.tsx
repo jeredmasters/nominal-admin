@@ -13,14 +13,14 @@ import {
 } from "react-admin";
 import { Button, Typography } from "@mui/material";
 import { HiddenInput } from "../../components/hidden-input";
-import { OrgCreateForm } from "../../components/org-create-form";
+import { CreatePanel } from "../../components/create-panel";
 
 export const CreateEmailToken = () => {
   const { record } = useCreateController();
   const { voter_id } = record || {};
   const { data: voter } = useGetOne("voters", { id: voter_id });
   return (
-    <OrgCreateForm resource="email-tokens" title="Create Email Token">
+    <CreatePanel resource="email-tokens">
       <TextInput
         source="email"
         fullWidth
@@ -35,6 +35,6 @@ export const CreateEmailToken = () => {
       />
 
       <TextInput source="voter_id" style={{ display: "none" }} />
-    </OrgCreateForm>
+    </CreatePanel>
   );
 };

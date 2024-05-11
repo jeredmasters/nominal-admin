@@ -14,6 +14,7 @@ import { API_BASE } from "../config";
 import { LocalStorageContext } from "./localstorage.provider";
 import { IConfig } from "../domain/config";
 import { DataProvider } from "react-admin";
+import simpleRestProvider from "ra-data-json-server";
 
 export enum AUTH_STATUS {
   VERIFYING = "VERIFYING",
@@ -34,6 +35,7 @@ export interface IAuthContext {
   authAt: Date | null;
   status: AUTH_STATUS;
   config: IConfig | null;
+  dataProvider: DataProvider | null;
 }
 
 export interface HttpRequest {}
@@ -71,6 +73,7 @@ export const AuthContext = createContext<IAuthContext>({
   authAt: null,
   status: AUTH_STATUS.VERIFYING,
   config: null,
+  dataProvider: null,
 });
 export const AuthProvider: React.FC<PropsWithChildren> = (props) => {
   const { getValue, setValue, delValue } = useContext(LocalStorageContext);
@@ -163,6 +166,13 @@ export const AuthProvider: React.FC<PropsWithChildren> = (props) => {
     }
   }, [fetch, publicKey, secretKey]);
 
+  const dataProvider: DataProvider | null = React.useMemo(() => {
+    if (fetch) {
+      return simpleRestProvider("", fetch);
+    }
+    return null;
+  }, [fetch]);
+
   return (
     <AuthContext.Provider
       value={{
@@ -173,6 +183,7 @@ export const AuthProvider: React.FC<PropsWithChildren> = (props) => {
         authAt,
         status,
         config,
+        dataProvider,
       }}
     >
       {props.children}

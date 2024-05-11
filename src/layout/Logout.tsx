@@ -9,7 +9,7 @@ export const Logout = () => {
   const navigate = useNavigate();
 
   const navigateToLogin = () => navigate("/login");
-
+  console.log("LOGOUT PAGE");
   useEffect(() => {
     if (status === AUTH_STATUS.UNAUTHENTICATED) {
       navigateToLogin();

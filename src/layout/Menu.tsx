@@ -1,41 +1,34 @@
-import * as React from "react";
-import { useState } from "react";
-import Box from "@mui/material/Box";
+import { Box, Drawer } from "@mui/material";
 
 import {
   DashboardMenuItem,
   Link,
   MenuItemLink,
   MenuProps,
-  useGetList,
   useSidebarState,
 } from "react-admin";
 
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
+import { useGetMany } from "../context/data.provider";
+import { SimpleLoading } from "../components/loading";
 
-export const OrganisationMenu = ({ dense = false }: MenuProps) => {
-  const [open] = useSidebarState();
-
-  const { data: organisations, isLoading, error } = useGetList("organisations");
+interface OrganisationMenuProps {
+  open: boolean;
+  setOpen: (v: boolean) => void;
+}
+export const OrganisationMenu = () => {
+  const { data: organisations } = useGetMany("organisations");
+  if (!organisations) {
+    return <SimpleLoading />;
+  }
   return (
-    <Box
-      sx={{
-        width: open ? 200 : 50,
-        marginTop: 1,
-        marginBottom: 1,
-        transition: (theme) =>
-          theme.transitions.create("width", {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.leavingScreen,
-          }),
-      }}
-    >
+    <Box>
       {organisations
         ? organisations.map((o) => (
             <MenuItemLink
               key={o.id}
-              to={`/organisations/${o.id}/show`}
+              to={`/organisations/${o.id}`}
               state={{ _scrollToTop: true }}
               primaryText={o.label}
               dense={false}

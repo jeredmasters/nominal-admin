@@ -1,18 +1,12 @@
 import * as React from "react";
-import {
-  Create,
-  SimpleForm,
-  TextInput,
-  DateInput,
-  required,
-  ReferenceInput,
-  SelectInput,
-  Title,
-  ReferenceField,
-} from "react-admin";
-import { Button, Typography } from "@mui/material";
 import { useLocation } from "react-router-dom";
-import { HiddenInput } from "../../components/hidden-input";
+import { SimpleCreate } from "../../components/simple-create";
+import {
+  DateInput,
+  SelectInput,
+  TextInput,
+} from "../../components/simple-form";
+import { TabContainer, TabPanel } from "../../components/tab-panel";
 
 const getFutureDate = (days: number) => {
   const date = new Date();
@@ -22,44 +16,43 @@ const getFutureDate = (days: number) => {
 
 export const CreateElection = () => {
   const { state } = useLocation();
-  console.log({ state });
-  const { record } = state;
-  const { organisation_id } = record || {};
-
   return (
-    <Create redirect="show">
-      <Typography variant="h4">Create Election</Typography>
+    <TabContainer>
+      <TabPanel label="Create Election">
+        <SimpleCreate resource="elections" initialValue={state}>
+          <TextInput field="label" sm={8} />
+          <SelectInput
+            field="response_type"
+            sm={4}
+            options={[
+              { value: "YES_NO", label: "Yes/No" },
+              { value: "RANKING", label: "Ranking" },
+              { value: "PREFERENCE", label: "Preference" },
+              { value: "FIRST_PAST", label: "First Past the Post" },
+            ]}
+          />
 
-      <SimpleForm>
-        <TextInput source="label" validate={[required()]} fullWidth />
-        <SelectInput
-          source="response_type"
-          choices={[
-            { id: "YES_NO", name: "Yes/No" },
-            { id: "RANKING", name: "Ranking" },
-            { id: "PREFERENCE", name: "Preference" },
-            { id: "FIRST_PAST", name: "First Past the Post" },
-          ]}
-          isRequired
-          fullWidth
-        />
-        <TextInput source="teaser" multiline={true} label="Short description" />
-        <DateInput
-          label="Opens At"
-          source="opens_at"
-          defaultValue={new Date()}
-        />
-        <DateInput
-          label="Closes At"
-          source="closes_at"
-          defaultValue={getFutureDate(30)}
-        />
-        {organisation_id ? (
-          <HiddenInput source="organisation_id" />
-        ) : (
-          <ReferenceInput reference="organisations" source="organisation_id" />
-        )}
-      </SimpleForm>
-    </Create>
+          <DateInput
+            label="Opens At"
+            field="opens_at"
+            defaultValue={new Date()}
+            sm={6}
+          />
+          <DateInput
+            label="Closes At"
+            field="closes_at"
+            defaultValue={getFutureDate(30)}
+            sm={6}
+          />
+
+          <TextInput
+            field="short_description"
+            multiline={4}
+            label="Short description"
+            xs={12}
+          />
+        </SimpleCreate>
+      </TabPanel>
+    </TabContainer>
   );
 };

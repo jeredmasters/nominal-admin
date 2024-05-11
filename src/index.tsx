@@ -6,16 +6,18 @@ import { ThemeProvider } from "react-admin";
 import { theme } from "./app/theme";
 import { AuthProvider } from "./context/auth.provider";
 import { LocalStorageProvider } from "./context/localstorage.provider";
-import { BrowserRouter } from "react-router-dom";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
       <LocalStorageProvider>
-        <AuthProvider>
-          <BrowserRouter>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <AuthProvider>
             <App />
-          </BrowserRouter>
-        </AuthProvider>
+          </AuthProvider>
+        </LocalizationProvider>
       </LocalStorageProvider>
     </ThemeProvider>
   </React.StrictMode>

@@ -5,32 +5,25 @@ import {
   ListToolbar,
   Pagination,
   RaRecord,
-  Title,
   TopToolbar,
 } from "react-admin";
 import { useShowPath } from "../util";
-import { Card } from "@mui/material";
-import { useParams } from "react-router-dom";
-import CreateButton from "./create-button";
+import { CreateButton } from "./create-button";
 
 export interface OrgListProps<RecordType extends RaRecord = any>
   extends ListProps<RecordType> {
   resource: string;
-  omitOrgFilter?: boolean;
 }
 
-export const OrgList = ({
+export const ListPanel = ({
   children,
   actions,
   filters,
   filter,
-  title,
   resource,
-  omitOrgFilter,
   ...props
 }: OrgListProps) => {
-  const rowClick = useShowPath();
-  const { organisation_id } = useParams();
+  const rowClick = useShowPath(resource);
   if (!filter) {
     filter = {};
   }
@@ -38,28 +31,23 @@ export const OrgList = ({
     <ListBase
       resource={resource}
       filter={{
-        organisation_id: omitOrgFilter ? undefined : organisation_id,
         ...filter,
       }}
       exporter={false}
-      perPage={100}
+      perPage={50}
       {...props}
     >
-      <Title title={title} />
       <ListToolbar
         filters={filters}
         actions={
           <TopToolbar>
-            <CreateButton
-              resource={resource}
-              state={{ record: { organisation_id, ...filter } }}
-            />
+            <CreateButton resource={resource} state={filter} />
           </TopToolbar>
         }
       />
-      <Card>
-        <Datagrid rowClick={rowClick}>{children}</Datagrid>
-      </Card>
+      <Datagrid resource={resource} rowClick={rowClick}>
+        {children}
+      </Datagrid>
       <Pagination />
     </ListBase>
   );

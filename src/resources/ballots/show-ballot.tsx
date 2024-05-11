@@ -1,35 +1,24 @@
-import {
-  Show,
-  TextField,
-  DateField,
-  useRecordContext,
-  EditButton,
-  TopToolbar,
-  TabbedShowLayout,
-  List,
-  CreateButton,
-  useGetOne,
-} from "react-admin";
 import { useParams } from "react-router-dom";
-import { IdField } from "../../components/IdField";
 import { ListCandidates } from "../candidates/list-candidates";
+import { TabContainer, TabPanel } from "../../components/tab-panel";
+import { ShowSimple } from "../../components/show-blob";
+import { ErrorPanel } from "../../components/error";
 
 export const ShowBallot = () => {
-  const { id } = useParams();
+  const { ballot_id } = useParams();
+
+  if (!ballot_id) {
+    return <ErrorPanel text="Must have ballot_id" source="ShowBallot" />;
+  }
 
   return (
-    <Show>
-      <TabbedShowLayout>
-        <TabbedShowLayout.Tab label="Ballot">
-          <IdField />
-          <TextField source="label" />
-          <DateField source="created_at" />
-          <EditButton />
-        </TabbedShowLayout.Tab>
-        <TabbedShowLayout.Tab label="Candidates">
-          <ListCandidates ballot_id={id} />
-        </TabbedShowLayout.Tab>
-      </TabbedShowLayout>
-    </Show>
+    <TabContainer>
+      <TabPanel label="Ballot">
+        <hr />
+        <ShowSimple resource="ballots" id={ballot_id} />
+        <hr />
+        <ListCandidates ballot_id={ballot_id} />
+      </TabPanel>
+    </TabContainer>
   );
 };

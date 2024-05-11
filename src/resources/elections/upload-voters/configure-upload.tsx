@@ -137,7 +137,7 @@ export const ConfigureUpload = ({
     formData.append("linebreak", linebreak.toString());
     formData.append("columns", JSON.stringify(columns));
 
-    fetch(`/voter_digests/upload`, {
+    fetch(`/voter-digests/upload`, {
       method: "post",
       body: formData,
       multipartFormData: true,

@@ -4,36 +4,41 @@ import {
   DateField,
   EditButton,
   TabbedShowLayout,
+  useDataProvider,
 } from "react-admin";
 import { Button, Typography } from "@mui/material";
 import { useParams } from "react-router-dom";
 import { IdField } from "../../components/IdField";
-import { ListVoters } from "../voters/list-voter";
-import { OrgList } from "../../components/org-list";
-import { ListCandidates } from "../candidates/list-candidates";
 import { ListElections } from "../elections/list-elections";
+import { ShowPanel } from "../../components/show-panel";
+import { TabContainer, TabPanel } from "../../components/tab-panel";
+import { useResource } from "../../util";
+import { useContext } from "react";
+import { AuthContext } from "../../context/auth.provider";
+import { ErrorPanel } from "../../components/error";
+import { ShowSimple } from "../../components/show-blob";
 
 export const ShowOrganisation = () => {
+  useResource();
   const { organisation_id } = useParams();
+  if (!organisation_id) {
+    return (
+      <ErrorPanel text="Must have organisation_id" source="ShowOrganisation" />
+    );
+  }
+
   return (
-    <Show resource="organisations" id={organisation_id}>
-      <TabbedShowLayout syncWithLocation={false}>
-        <TabbedShowLayout.Tab label="Organisation">
-          <IdField />
-          <TextField source="label" />
-          <DateField source="created_at" />
-          <EditButton />
-        </TabbedShowLayout.Tab>
-        <TabbedShowLayout.Tab label="Elections">
-          <ListElections />
-        </TabbedShowLayout.Tab>
-        <TabbedShowLayout.Tab label="Voters">
-          <ListVoters />
-        </TabbedShowLayout.Tab>
-        <TabbedShowLayout.Tab label="Candidates">
-          <ListCandidates />
-        </TabbedShowLayout.Tab>
-      </TabbedShowLayout>
-    </Show>
+    <TabContainer hashTabs>
+      <TabPanel label="Organisation Details">
+        <ShowSimple
+          resource="organisations"
+          id={organisation_id}
+          keys={["label"]}
+        />
+      </TabPanel>
+      <TabPanel label="Elections" id="elections">
+        <ListElections />
+      </TabPanel>
+    </TabContainer>
   );
 };

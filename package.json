@@ -10,7 +10,9 @@
     "format": "prettier --write ./src"
   },
   "dependencies": {
+    "@mui/x-date-pickers": "^7.4.0",
     "axios": "^1.6.8",
+    "dayjs": "^1.11.11",
     "jsonwebtoken": "^9.0.2",
     "jwt-encode": "^1.0.1",
     "papaparse": "^5.4.1",

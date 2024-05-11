@@ -3,24 +3,17 @@ import {
   Create,
   SimpleForm,
   useCreateController,
-  useGetOne,
-  Identifier,
   useCreate,
   useRedirect,
+  CreateBase,
 } from "react-admin";
-import { Typography, Box } from "@mui/material";
 import { useShowPath } from "../util";
 
 export interface OrgCreateFormProps extends React.PropsWithChildren {
   resource: string;
-  title: string;
 }
-export const OrgCreateForm = ({
-  title,
-  resource,
-  children,
-}: OrgCreateFormProps) => {
-  const showPath = useShowPath();
+export const CreatePanel = ({ resource, children }: OrgCreateFormProps) => {
+  const showPath = useShowPath(resource);
   const redirect = useRedirect();
   const [create] = useCreate();
   const postSave = (data: any) => {
@@ -28,18 +21,14 @@ export const OrgCreateForm = ({
   };
   const handleSuccess = ({ id }: any, variables: any, context: any) => {
     if (id && resource) {
-      const path = showPath(String(id), resource);
+      const path = showPath(String(id));
       console.log({ path });
       redirect(path);
     }
   };
   return (
-    <Create resource={resource} redirect={false}>
-      <Box m={2}>
-        <Typography variant="h5">{title}</Typography>
-        <hr />
-      </Box>
+    <CreateBase resource={resource} redirect={false}>
       <SimpleForm onSubmit={postSave}>{children}</SimpleForm>
-    </Create>
+    </CreateBase>
   );
 };

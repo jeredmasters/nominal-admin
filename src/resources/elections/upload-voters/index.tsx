@@ -2,8 +2,9 @@ import React, { ChangeEventHandler, useState } from "react";
 import { Grid, Typography, TextField as MuiTextField } from "@mui/material";
 import { TextField } from "react-admin";
 import { IdField } from "../../../components/IdField";
-import { OrgList } from "../../../components/org-list";
+import { ListPanel } from "../../../components/list-panel";
 import { ConfigureUpload } from "./configure-upload";
+import { SimpleTable } from "../../../components/simple-table";
 
 interface UploadVotersCsvProps {
   election_id: string;
@@ -33,12 +34,11 @@ export const UploadVotersCsv = ({ election_id }: UploadVotersCsvProps) => {
         </form>
       </Grid>
       <Grid item xs={12}>
-        <OrgList resource="voter_digests" perPage={100} omitOrgFilter={true}>
-          <IdField />
-          <TextField source="original_filename" />
-          <TextField source="row_count" />
-          <TextField source="status" />
-        </OrgList>
+        <SimpleTable
+          resource="voter-digests"
+          filter={{ election_id }}
+          columns={["original_filename", "row_count", "status"]}
+        />
       </Grid>
     </Grid>
   );

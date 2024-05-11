@@ -1,31 +1,28 @@
 import * as React from "react";
-import {
-  Create,
-  SimpleForm,
-  TextInput,
-  DateInput,
-  required,
-  ReferenceInput,
-  SelectInput,
-} from "react-admin";
-import { Button, Typography } from "@mui/material";
+import { Button } from "@mui/material";
+import { CreatePanel } from "../../components/create-panel";
+import { TabContainer, TabPanel } from "../../components/tab-panel";
+import { useParams } from "react-router-dom";
+import { HiddenInput } from "../../components/hidden-input";
+import { ErrorPanel } from "../../components/error";
+import { TextInput } from "../../components/simple-form";
+import { SimpleCreate } from "../../components/simple-create";
 
-export const CreateVoter = () => (
-  <Create redirect="show">
-    <Typography variant="h4">New Voter</Typography>
+export const CreateVoter = () => {
+  const { election_id } = useParams();
 
-    <SimpleForm>
-      <TextInput source="first_name" fullWidth isRequired />
-      <TextInput source="last_name" fullWidth isRequired />
-      <TextInput source="email" fullWidth isRequired />
-
-      <ReferenceInput
-        source="organisation_id"
-        reference="organisations"
-        isRequired
-        fullWidth
-        disabled
-      />
-    </SimpleForm>
-  </Create>
-);
+  if (!election_id) {
+    return <ErrorPanel text="election_id" source="CreateVoter" />;
+  }
+  return (
+    <TabContainer>
+      <TabPanel label="New Voter">
+        <SimpleCreate resource="voters" initialValue={{ election_id }}>
+          <TextInput field="first_name" sm={6} />
+          <TextInput field="last_name" sm={6} />
+          <TextInput field="email" />
+        </SimpleCreate>
+      </TabPanel>
+    </TabContainer>
+  );
+};
