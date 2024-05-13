@@ -3,8 +3,9 @@ import { ListCandidates } from "../candidates/list-candidates";
 import { TabContainer, TabPanel } from "../../components/tab-panel";
 import { ShowSimple } from "../../components/show-blob";
 import { ErrorPanel } from "../../components/error";
+import { RESOURCE } from "../../const/resources";
 
-export const ShowBallot = () => {
+export const ShowBallotPage = () => {
   const { ballot_id } = useParams();
 
   if (!ballot_id) {
@@ -15,10 +16,17 @@ export const ShowBallot = () => {
     <TabContainer>
       <TabPanel label="Ballot">
         <hr />
-        <ShowSimple resource="ballots" id={ballot_id} />
+        <ShowBallot ballot_id={ballot_id} />
         <hr />
         <ListCandidates ballot_id={ballot_id} />
       </TabPanel>
     </TabContainer>
   );
+};
+
+interface ShowBallot {
+  ballot_id: string;
+}
+export const ShowBallot = ({ ballot_id }: ShowBallot) => {
+  return <ShowSimple resource={RESOURCE.ballot} id={ballot_id} />;
 };

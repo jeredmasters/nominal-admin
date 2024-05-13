@@ -1,34 +1,20 @@
-import React, {
-  ChangeEventHandler,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Grid,
   Typography,
   TextField as MuiTextField,
-  TableContainer,
-  Table,
-  TableBody,
-  TableHead,
-  TableRow,
-  TableCell,
-  Paper,
   FormControlLabel,
   FormGroup,
   Checkbox,
   MenuItem,
   FormControl,
-  InputLabel,
-  Select,
 } from "@mui/material";
 import { AuthContext } from "../../../context/auth.provider";
-import { Button, Loading, TextField } from "react-admin";
 import { useParams } from "react-router-dom";
 import { parse } from "papaparse";
 import { PreviewUpload } from "./preview-upload";
+import { SimpleButton } from "../../../components/simple-button";
+import { SimpleLoading } from "../../../components/loading";
 const options = [
   { value: "_ignore_", label: "(ignore)" },
   { value: "first_name", label: "First Name" },
@@ -121,7 +107,7 @@ export const ConfigureUpload = ({
   }
 
   if (!fetch || !parseResult) {
-    return <Loading />;
+    return <SimpleLoading />;
   }
 
   const handleSubmit = () => {
@@ -233,14 +219,12 @@ export const ConfigureUpload = ({
         </Grid>
       )}
       <Grid item xs={12} mt={2}>
-        <Button
-          type="button"
+        <SimpleButton
           label="Submit"
           variant="contained"
-          size="large"
           sx={{ justifyContent: "flex-end" }}
-          onClick={handleSubmit}
-        ></Button>
+          func={handleSubmit}
+        ></SimpleButton>
       </Grid>
     </Grid>
   );

@@ -8,25 +8,15 @@ import { ShowSimple } from "../../components/show-blob";
 import { AuthContext } from "../../context/auth.provider";
 import { SimpleTable } from "../../components/simple-table";
 import { ErrorPanel } from "../../components/error";
-import { SimpleCreate } from "../../components/simple-create";
-import { TextInput } from "../../components/simple-form";
+import { RESOURCE } from "../../const/resources";
+import { AddTagForm } from "../voter_tags/create-voter-tag";
 
-export const ShowVoter = () => {
+export const ShowVoterPage = () => {
   const { voter_id } = useParams();
-  const { fetch } = useContext(AuthContext);
   if (!voter_id) {
     return <ErrorPanel text="Must have voter_id" source="ShowVoter" />;
   }
-  if (!fetch) {
-    return <div>MUST HAVE AUTH</div>;
-  }
 
-  const handleSend = () => {
-    fetch(`/voters/${voter_id}/send_invite`, {
-      method: "post",
-      body: { replace_token: true },
-    });
-  };
   const handleNewTag = () => {
     console.log("TODO: refresh table");
   };
@@ -34,22 +24,10 @@ export const ShowVoter = () => {
     <TabContainer>
       <TabPanel label="Voter">
         <hr />
-        <ShowSimple
-          resource="voters"
-          id={voter_id}
-          keys={["first_name", "last_name", "email"]}
-          buttons={[
-            {
-              label: "Send Invite",
-              icon: <MailOutlineIcon />,
-              func: handleSend,
-              confirm: true,
-            },
-          ]}
-        />
+        <ShowVoter voter_id={voter_id} />
         <hr />
         <SimpleTable
-          resource="voter-tags"
+          resource={RESOURCE.voter_tag}
           filter={{ voter_id }}
           columns={["key", "value"]}
           buttons={[
@@ -74,32 +52,34 @@ export const ShowVoter = () => {
   );
 };
 
-interface AddTagFormProps {
+interface ShowVoterProps {
   voter_id: string;
-  onClose: () => void;
-  onNewTag: () => void;
 }
-export const AddTagForm = ({
-  voter_id,
-  onNewTag,
-  onClose,
-}: AddTagFormProps) => {
-  const handleSuccess = () => {
-    onClose();
-    onNewTag();
+export const ShowVoter = ({ voter_id }: ShowVoterProps) => {
+  const { fetch } = useContext(AuthContext);
+  if (!fetch) {
+    return <ErrorPanel text="Must have auth fetch" source="ShowVoter" />;
+  }
+
+  const handleSend = () => {
+    fetch(`/voters/${voter_id}/send_invite`, {
+      method: "post",
+      body: { replace_token: true },
+    });
   };
   return (
-    <SimpleCreate
-      resource="voter-tags"
-      initialValue={{ voter_id }}
-      onSuccess={handleSuccess}
-    >
-      <Typography variant="h6" mb={2}>
-        New Voter Tag
-      </Typography>
-
-      <TextInput field="key" />
-      <TextInput field="value" />
-    </SimpleCreate>
+    <ShowSimple
+      resource={RESOURCE.voter}
+      id={voter_id}
+      keys={["first_name", "last_name", "email"]}
+      buttons={[
+        {
+          label: "Send Invite",
+          icon: <MailOutlineIcon />,
+          func: handleSend,
+          confirm: true,
+        },
+      ]}
+    />
   );
 };

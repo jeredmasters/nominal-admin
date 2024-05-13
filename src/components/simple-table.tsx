@@ -5,7 +5,7 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import { Paper, Box, Typography } from "@mui/material";
+import { Paper, Box, Typography, Checkbox } from "@mui/material";
 import {
   PaginationPayload,
   SortPayload,
@@ -16,6 +16,7 @@ import { useNavigate } from "react-router-dom";
 import { CreateButton } from "./create-button";
 import { StatusChip } from "./status-chip";
 import { SimpleButton, SimpleButtonProps } from "./simple-button";
+import { RESOURCE } from "../const/resources";
 
 function createData(
   name: string,
@@ -44,11 +45,12 @@ interface SimpleColumnR {
 }
 interface SimpleTableProps {
   label?: string;
-  resource: string;
+  resource: RESOURCE;
   buttons?: SimpleButtonProps[];
   filter?: any;
   columns?: string[] | SimpleColumn[];
   onRowClick?: false | ((row: any, col: SimpleColumnR) => void);
+  selectActions?: Array<SimpleButtonProps>;
 }
 export const SimpleTable = ({
   label,
@@ -57,6 +59,7 @@ export const SimpleTable = ({
   columns,
   buttons,
   onRowClick,
+  selectActions,
 }: SimpleTableProps) => {
   const navigate = useNavigate();
   const [pagination, setPagination] = useState<PaginationPayload>({
@@ -68,6 +71,7 @@ export const SimpleTable = ({
     order: "DESC",
   });
   const showPath = useShowPath(resource);
+  const [selected, setSelected] = useState<Array<string>>([]);
   const { data } = useGetMany(resource, { sort, pagination, filter });
   const formattedColumns: Array<SimpleColumnR> = useMemo(() => {
     if (columns && columns.length > 0) {
@@ -101,6 +105,21 @@ export const SimpleTable = ({
       navigate(path);
     }
   };
+  const handleCheck = (id: string) => {
+    if (selected.includes(id)) {
+      setSelected((s) => s.filter((i) => i !== id));
+    } else {
+      setSelected((s) => [...s, id]);
+    }
+  };
+  const handleCheckAll = () => {
+    if (selected.length > 0) {
+      setSelected([]);
+    } else if (data) {
+      setSelected(data.map((d: any) => d.id));
+    }
+  };
+  console.log({ selected });
   return (
     <Box>
       <Box sx={{ display: "flex", justifyContent: "space-between" }}>
@@ -115,10 +134,33 @@ export const SimpleTable = ({
           )}
         </Box>
       </Box>
+      <Box
+        p={1}
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          background: selected.length ? "#d5e5f3" : undefined,
+        }}
+      >
+        {selectActions && selected.length > 0
+          ? selectActions.map((sa, i) => (
+              <SimpleButton key={i} {...sa} state={{ ...sa.state, selected }} />
+            ))
+          : null}
+      </Box>
       <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
+        <Table sx={{ minWidth: 500 }} size="small" aria-label="a dense table">
           <TableHead>
             <TableRow>
+              {selectActions ? (
+                <TableCell>
+                  <Checkbox
+                    checked={data ? selected.length === data.length : false}
+                    onChange={handleCheckAll}
+                    sx={{ p: 0 }}
+                  />
+                </TableCell>
+              ) : null}
               {formattedColumns.map((c, i) => (
                 <TableCell key={i} style={{ fontWeight: 700 }}>
                   {c.label}
@@ -131,8 +173,21 @@ export const SimpleTable = ({
               data.map((row, i) => (
                 <TableRow
                   key={i}
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  sx={{
+                    "&:last-child td, &:last-child th": { border: 0 },
+                    ":hover": { background: "#eee" },
+                  }}
                 >
+                  {selectActions ? (
+                    <TableCell>
+                      <Checkbox
+                        checked={selected.includes(row.id)}
+                        onChange={() => handleCheck(row.id)}
+                        sx={{ p: 0 }}
+                      />
+                    </TableCell>
+                  ) : null}
+
                   {formattedColumns.map((c, j) => (
                     <TableCell
                       key={j}

@@ -53,7 +53,7 @@ export const SimpleAppBar = ({ onSidebar }: SimpleAppBarProps) => {
           <Box ml={2}>
             <NavButton
               label="Organisations"
-              to="/organisations/list"
+              to="/organisations"
               active={pathname.startsWith("/organisations")}
               icon={<BusinessIcon />}
             />

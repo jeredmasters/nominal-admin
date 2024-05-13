@@ -31,35 +31,26 @@ export type SimpleButtonProps =
   | SimpleButtonProps_Modal
   | SimpleButtonProps_Link
   | SimpleButtonProps_Func;
-
-export interface SimpleButtonProps_Modal {
+interface SimpleButtonProps_Base {
   label: string;
   icon?: any;
   color?: Color;
   variant?: SimpleButtonVariant;
-  modal: (onClose: () => void) => JSX.Element;
-  sx?: any;
-}
-export interface SimpleButtonProps_Link {
-  label: string;
-  icon?: any;
-  color?: Color;
-  variant?: SimpleButtonVariant;
-  href: string;
   state?: any;
   sx?: any;
 }
-export interface SimpleButtonProps_Func {
-  label: string;
-  icon?: any;
-  color?: Color;
-  variant?: SimpleButtonVariant;
-  func: () => void;
+export interface SimpleButtonProps_Modal extends SimpleButtonProps_Base {
+  modal: (onClose: () => void, meta?: any) => JSX.Element;
+}
+export interface SimpleButtonProps_Link extends SimpleButtonProps_Base {
+  href: string;
+}
+export interface SimpleButtonProps_Func extends SimpleButtonProps_Base {
+  func: (meta?: any) => void;
   confirm?: boolean | string;
-  sx?: any;
 }
 export const SimpleButton = (props: SimpleButtonProps) => {
-  const { label, icon, variant } = props;
+  const { label, icon, variant, state } = props;
   const navigate = useNavigate();
   const [injectModal, setInjectModal] = useState<any | null>();
   const handleClose = () => setInjectModal(null);
@@ -70,11 +61,11 @@ export const SimpleButton = (props: SimpleButtonProps) => {
     if ("func" in props) {
       const { func, confirm } = props;
       if (!confirm) {
-        func();
+        func(state);
       } else {
         const text = typeof confirm === "string" ? confirm : label + "?";
         const handleConfirm = () => {
-          func();
+          func(state);
           handleClose();
         };
         setInjectModal(
@@ -100,7 +91,7 @@ export const SimpleButton = (props: SimpleButtonProps) => {
     }
     if ("modal" in props) {
       const { modal } = props;
-      const render = modal(handleClose);
+      const render = modal(handleClose, state);
       setInjectModal(
         <Modal open={true} onClose={handleClose}>
           <Box sx={style}>{render}</Box>
@@ -108,7 +99,7 @@ export const SimpleButton = (props: SimpleButtonProps) => {
       );
     }
     if ("href" in props) {
-      const { href, state } = props;
+      let { href } = props;
 
       navigate(href, { state });
     }

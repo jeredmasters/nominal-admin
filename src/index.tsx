@@ -3,7 +3,7 @@ import ReactDOM from "react-dom/client";
 
 import { App } from "./app";
 import { ThemeProvider } from "react-admin";
-import { theme } from "./app/theme";
+import { theme } from "./theme";
 import { AuthProvider } from "./context/auth.provider";
 import { LocalStorageProvider } from "./context/localstorage.provider";
 import { LocalizationProvider } from "@mui/x-date-pickers";

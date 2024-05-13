@@ -1,17 +1,16 @@
-import { Button } from "react-admin";
 import AddIcon from "@mui/icons-material/Add";
-import { getSingluar, useCreatePath, useEditPath } from "../util";
-import { Link } from "react-router-dom";
+import { useCreatePath } from "../util";
 import { SimpleButton } from "./simple-button";
+import { RESOURCE } from "../const/resources";
+import { getSingluar } from "../util/resource";
 
 interface CreateButtonProps {
-  resource: string;
+  resource: RESOURCE;
   label?: string;
   state?: any;
 }
 export const CreateButton = ({ resource, label, state }: CreateButtonProps) => {
   let path = useCreatePath(resource);
-  console.log({ path });
   return (
     <SimpleButton
       label={label || "New " + getSingluar(resource)}

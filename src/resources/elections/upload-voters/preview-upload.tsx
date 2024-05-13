@@ -135,7 +135,7 @@ export const PreviewUpload = ({
 
   return (
     <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
+      <Table sx={{ minWidth: 500 }} size="small">
         <TableHead>
           <TableRow>
             <TableCell component="th" sx={{ background: "lightgrey" }}>

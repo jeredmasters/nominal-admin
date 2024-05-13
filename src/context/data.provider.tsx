@@ -16,7 +16,8 @@ import { IConfig } from "../domain/config";
 import { DataProvider, GetManyResult } from "react-admin";
 import simpleRestProvider from "ra-data-json-server";
 import { AuthContext } from "./auth.provider";
-import { getRepresentation } from "../util";
+import { RESOURCE } from "../const/resources";
+import { getRepresentation } from "../util/resource";
 
 export enum AUTH_STATUS {
   VERIFYING = "VERIFYING",
@@ -194,7 +195,7 @@ export const QueryProvider: React.FC<PropsWithChildren> = (props) => {
   );
 };
 
-export const useGetOne = (resource: string, id: string) => {
+export const useGetOne = (resource: RESOURCE, id: string) => {
   const { dataProvider } = useContext(AuthContext);
   const [value, setValue] = useState<any | null>(null);
   if (!dataProvider) {
@@ -208,12 +209,12 @@ export const useGetOne = (resource: string, id: string) => {
   return value;
 };
 
-export const useGetLabel = (resource: string, id: string) => {
+export const useGetLabel = (resource: RESOURCE, id: string) => {
   const data = useGetOne(resource, id);
   if (!data) {
     return "loading";
   }
-  return getRepresentation(resource, useGetOne);
+  return getRepresentation(resource, data);
 };
 
 export interface SortPayload {
@@ -233,7 +234,7 @@ export interface GetListParams {
   filter?: any;
   meta?: any;
 }
-export const useGetMany = (resource: string, params?: GetListParams) => {
+export const useGetMany = (resource: RESOURCE, params?: GetListParams) => {
   const { dataProvider } = useContext(AuthContext);
   const [value, setValue] = useState<GetManyResult<any> | null>(null);
   if (!dataProvider) {

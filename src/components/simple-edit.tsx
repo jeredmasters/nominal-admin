@@ -6,9 +6,10 @@ import { ErrorPanel } from "./error";
 import { AuthContext } from "../context/auth.provider";
 import { SimpleLoading } from "./loading";
 import { SimpleForm } from "./simple-form";
+import { RESOURCE } from "../const/resources";
 
 export interface EditPanelProps extends PropsWithChildren {
-  resource: string;
+  resource: RESOURCE;
   id: string;
 }
 

@@ -1,7 +1,5 @@
-import { ListPanel } from "../../components/list-panel";
-import { TextField } from "react-admin";
-import { IdField } from "../../components/IdField";
 import { SimpleTable } from "../../components/simple-table";
+import { RESOURCE } from "../../const/resources";
 
 interface ListCandidatesProps {
   election_id?: string;
@@ -13,7 +11,7 @@ export const ListCandidates = ({
 }: ListCandidatesProps) => {
   return (
     <SimpleTable
-      resource="candidates"
+      resource={RESOURCE.candidate}
       filter={{ election_id, ballot_id }}
       columns={["first_name", "last_name", "status"]}
     />

@@ -6,6 +6,7 @@ import { CreateButton } from "../../components/create-button";
 import { ErrorPanel } from "../../components/error";
 import { SimpleLoading } from "../../components/loading";
 import { useGetMany } from "../../context/data.provider";
+import { RESOURCE } from "../../const/resources";
 
 export interface BallotCardsProps {
   election_id?: string;
@@ -17,8 +18,8 @@ export const BallotCards = ({
   candidate_id,
   showCandidates,
 }: BallotCardsProps) => {
-  const path = useShowPath("ballots");
-  const { data: ballots } = useGetMany("ballots", {
+  const path = useShowPath(RESOURCE.ballot);
+  const { data: ballots } = useGetMany(RESOURCE.ballot, {
     filter: { election_id, candidate_id },
   });
   if (!election_id) {
@@ -35,7 +36,7 @@ export const BallotCards = ({
         </Box>
         <Box>
           <CreateButton
-            resource="ballots"
+            resource={RESOURCE.ballot}
             state={{ election_id: election_id }}
           />
         </Box>

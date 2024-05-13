@@ -1,4 +1,3 @@
-import { Loading } from "react-admin";
 import {
   Grid,
   Box,
@@ -20,13 +19,14 @@ import {
 import { EditButton } from "./edit-button";
 import { SimpleButton, SimpleButtonProps } from "./simple-button";
 import { StatusChip } from "./status-chip";
-import { AuthContext } from "../context/auth.provider";
-import { ErrorPanel } from "./error";
 import { useGetOne } from "../context/data.provider";
-import { fieldLabel, getSingluar } from "../util";
+import { fieldLabel } from "../util";
+import { RESOURCE } from "../const/resources";
+import { SimpleLoading } from "./loading";
+import { getSingluar } from "../util/resource";
 
 interface ShowPanelProps extends PropsWithChildren {
-  resource: string;
+  resource: RESOURCE;
   id: string;
   title?: string;
   keys?: string[];
@@ -49,7 +49,7 @@ export const ShowSimple = ({
     [data, keys]
   );
   if (!data) {
-    return <Loading />;
+    return <SimpleLoading />;
   }
   if (!title) {
     title = getSingluar(resource) + " Details";

@@ -5,6 +5,7 @@ import { Outlet } from "react-router-dom";
 import { Box, Drawer, Card, useMediaQuery, Theme } from "@mui/material";
 import { SimpleAppBar } from "./simple-appbar";
 import { BreadCrumbs } from "../components/breadcrumb";
+import { RESOURCE } from "../const/resources";
 
 enum SIDEBAR {
   OPEN,
@@ -75,7 +76,7 @@ export const SimpleLayout = () => {
               height: "calc(100vh - 64px)",
             }}
           >
-            <BreadCrumbs resource={"elections"} />
+            <BreadCrumbs resource={RESOURCE.election} />
             <Outlet />
           </Box>
         </Box>

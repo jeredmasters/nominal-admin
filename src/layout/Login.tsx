@@ -22,10 +22,8 @@ import {
 
 import Box from "@mui/material/Box";
 import { AUTH_STATUS, AuthContext } from "../context/auth.provider";
-import { useResource } from "../util";
 
 export const Login = () => {
-  useResource();
   const [loading, setLoading] = useState(false);
   const translate = useTranslate();
 
@@ -91,9 +89,10 @@ export const Login = () => {
           minHeight: "100vh",
           alignItems: "center",
           justifyContent: "flex-start",
-          background: "url(https://source.unsplash.com/featured/1600x900)",
+          background: "url(/login-background.jpeg)",
           backgroundRepeat: "no-repeat",
           backgroundSize: "cover",
+          backgroundPosition: "center",
         }}
       >
         <Card sx={{ minWidth: 300, marginTop: "6em" }}>

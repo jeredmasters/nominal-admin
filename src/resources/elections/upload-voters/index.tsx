@@ -1,10 +1,8 @@
 import React, { ChangeEventHandler, useState } from "react";
 import { Grid, Typography, TextField as MuiTextField } from "@mui/material";
-import { TextField } from "react-admin";
-import { IdField } from "../../../components/IdField";
-import { ListPanel } from "../../../components/list-panel";
 import { ConfigureUpload } from "./configure-upload";
 import { SimpleTable } from "../../../components/simple-table";
+import { RESOURCE } from "../../../const/resources";
 
 interface UploadVotersCsvProps {
   election_id: string;
@@ -35,7 +33,7 @@ export const UploadVotersCsv = ({ election_id }: UploadVotersCsvProps) => {
       </Grid>
       <Grid item xs={12}>
         <SimpleTable
-          resource="voter-digests"
+          resource={RESOURCE.voter_digest}
           filter={{ election_id }}
           columns={["original_filename", "row_count", "status"]}
         />

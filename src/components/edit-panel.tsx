@@ -10,9 +10,10 @@ import {
 } from "react-admin";
 import { useShowPath } from "../util";
 import { Card, CardContent, Container } from "@mui/material";
+import { RESOURCE } from "../const/resources";
 
 export interface EditPanelProps extends PropsWithChildren {
-  resource: string;
+  resource: RESOURCE;
 }
 
 export const EditPanel = ({ resource, children }: EditPanelProps) => {

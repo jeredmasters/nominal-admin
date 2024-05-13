@@ -1,35 +1,34 @@
 import * as React from "react";
-import {
-  SimpleForm,
-  TextInput,
-  ReferenceInput,
-  Edit,
-  ReferenceField,
-  useGetOne,
-} from "react-admin";
-import { EditPanel } from "../../components/edit-panel";
+
 import { TabContainer, TabPanel } from "../../components/tab-panel";
 import { useParams } from "react-router-dom";
+import { RESOURCE } from "../../const/resources";
+import { ErrorPanel } from "../../components/error";
+import { SimpleEdit } from "../../components/simple-edit";
+import { TextInput } from "../../components/simple-form";
 
-export const EditProfile = () => {
-  const { id } = useParams();
-  const { data: voter } = useGetOne("profiles", { id });
-
+export const EditProfilePage = () => {
+  const { profile_id } = useParams();
+  if (!profile_id) {
+    return <ErrorPanel text="Must have profile_id" source="EditProfilePage" />;
+  }
   return (
     <TabContainer>
       <TabPanel label="Edit Profile">
-        <EditPanel resource="profiles">
-          <TextInput source="first_name" fullWidth isRequired />
-          <TextInput source="last_name" fullWidth isRequired />
-          <TextInput source="email" fullWidth isRequired />
-
-          <ReferenceField
-            label="Organisation"
-            source="organisation_id"
-            reference="organisations"
-          />
-        </EditPanel>
+        <EditProfile profile_id={profile_id} />
       </TabPanel>
     </TabContainer>
+  );
+};
+
+interface EditProfileProps {
+  profile_id: string;
+}
+export const EditProfile = ({ profile_id }: EditProfileProps) => {
+  return (
+    <SimpleEdit resource={RESOURCE.profile} id={profile_id}>
+      <TextInput field="preferred_name" />
+      <TextInput field="statement" multiline={4} />
+    </SimpleEdit>
   );
 };

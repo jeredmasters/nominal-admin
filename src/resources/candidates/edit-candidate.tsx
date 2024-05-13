@@ -4,30 +4,16 @@ import { TabContainer, TabPanel } from "../../components/tab-panel";
 import { ErrorPanel } from "../../components/error";
 import { SimpleEdit } from "../../components/simple-edit";
 import { SelectInput, TextInput } from "../../components/simple-form";
+import { RESOURCE } from "../../const/resources";
+export enum CANDIDATE_STATUS {
+  NOMINATED = "NOMINATED",
+  VERIFIED = "VERIFIED",
+  REVIEWED = "REVIEWED",
+  APPROVED = "APPROVED",
+  REJECTED = "REJECTED",
+}
 
-const choices = [
-  {
-    value: "NOMINATED",
-    label: "NOMINATED",
-  },
-  {
-    value: "VERIFIED",
-    label: "VERIFIED",
-  },
-  {
-    value: "REVIEWED",
-    label: "REVIEWED",
-  },
-  {
-    value: "APPROVED",
-    label: "APPROVED",
-  },
-  {
-    value: "REJECTED",
-    label: "REJECTED",
-  },
-];
-export const EditCandidate = () => {
+export const EditCandidatePage = () => {
   const { candidate_id } = useParams();
   if (!candidate_id) {
     return <ErrorPanel text="Must have candidate_id" source="EditCandidate" />;
@@ -35,14 +21,23 @@ export const EditCandidate = () => {
   return (
     <TabContainer>
       <TabPanel label="Edit Candidate">
-        <SimpleEdit resource="candidates" id={candidate_id}>
-          <TextInput field="title" />
-          <TextInput field="first_name" />
-          <TextInput field="last_name" />
-          <TextInput field="email" />
-          <SelectInput field="status" options={choices} />
-        </SimpleEdit>
+        <EditCandidate candidate_id={candidate_id} />
       </TabPanel>
     </TabContainer>
+  );
+};
+
+interface EditCandidateProps {
+  candidate_id: string;
+}
+export const EditCandidate = ({ candidate_id }: EditCandidateProps) => {
+  return (
+    <SimpleEdit resource={RESOURCE.candidate} id={candidate_id}>
+      <TextInput field="title" />
+      <TextInput field="first_name" />
+      <TextInput field="last_name" />
+      <TextInput field="email" />
+      <SelectInput field="status" options={CANDIDATE_STATUS} />
+    </SimpleEdit>
   );
 };

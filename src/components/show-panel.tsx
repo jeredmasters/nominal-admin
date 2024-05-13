@@ -4,9 +4,10 @@ import { useParams } from "react-router-dom";
 import { MouseEventHandler, PropsWithChildren } from "react";
 import { EditButton } from "./edit-button";
 import { SimpleButton, SimpleButtonProps } from "./simple-button";
+import { RESOURCE } from "../const/resources";
 
 interface ShowPanelProps extends PropsWithChildren {
-  resource: string;
+  resource: RESOURCE;
   editable?: boolean;
   buttons?: Array<SimpleButtonProps>;
 }
@@ -18,7 +19,7 @@ export const ShowPanel = ({
   buttons,
 }: ShowPanelProps) => {
   const { organisation_id, id } = useParams();
-  const resource_id = resource === "organisations" ? organisation_id : id;
+  const resource_id = resource === RESOURCE.organisation ? organisation_id : id;
   if (!resource_id) {
     return <div>MUST HAVE RESOURCE ID</div>;
   }

@@ -1,10 +1,10 @@
 import ContentCreate from "@mui/icons-material/Create";
 import { useEditPath } from "../util";
-import { Link } from "react-router-dom";
 import { SimpleButton } from "./simple-button";
+import { RESOURCE } from "../const/resources";
 
 interface EditButtonProps {
-  resource: string;
+  resource: RESOURCE;
   id: string;
 }
 export const EditButton = ({ resource, id }: EditButtonProps) => {

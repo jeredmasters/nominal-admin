@@ -6,19 +6,18 @@ import { ErrorPanel } from "../../components/error";
 import { TextInput } from "../../components/simple-form";
 import { RESOURCE } from "../../const/resources";
 
-export const EditVoter = () => {
-  const { voter_id } = useParams();
-  if (!voter_id) {
-    return <ErrorPanel text="Must have voter_id" source="EditVoter" />;
+export const EditOrganisation = () => {
+  const { organisation_id } = useParams();
+  if (!organisation_id) {
+    return (
+      <ErrorPanel text="Must have organisation_id" source="EditOrganisation" />
+    );
   }
   return (
     <TabContainer>
       <TabPanel label="Edit Voter">
-        <SimpleEdit resource={RESOURCE.voter} id={voter_id}>
-          <TextInput field="title" sm={2} />
-          <TextInput field="first_name" sm={5} />
-          <TextInput field="last_name" sm={5} />
-          <TextInput field="email" sm={12} />
+        <SimpleEdit resource={RESOURCE.organisation} id={organisation_id}>
+          <TextInput field="label" />
         </SimpleEdit>
       </TabPanel>
     </TabContainer>

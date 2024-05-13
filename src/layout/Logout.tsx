@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Loading } from "react-admin";
 
 import { AUTH_STATUS, AuthContext } from "../context/auth.provider";
+import { SimpleLoading } from "../components/loading";
 
 export const Logout = () => {
   const { logout, status } = React.useContext(AuthContext);
@@ -18,5 +18,5 @@ export const Logout = () => {
 
   useEffect(logout, []);
 
-  return <Loading />;
+  return <SimpleLoading />;
 };

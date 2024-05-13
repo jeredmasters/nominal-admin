@@ -1,15 +1,9 @@
-import {
-  Datagrid,
-  ListBase,
-  Loading,
-  SimpleList,
-  TextField,
-  useGetList,
-  useGetMany,
-} from "react-admin";
 import { Card, Typography, Box } from "@mui/material";
 import { ListCandidates } from "../candidates/list-candidates";
 import { StatusChip } from "../../components/status-chip";
+import { RESOURCE } from "../../const/resources";
+import { SimpleLoading } from "../../components/loading";
+import { useGetMany } from "../../context/data.provider";
 
 export interface ProfileCardsProps {
   election_id?: string;
@@ -24,14 +18,14 @@ export const ProfileCards = ({
   status,
   showCandidates,
 }: ProfileCardsProps) => {
-  const { data: profiles } = useGetList("profiles", {
+  const { data: profiles } = useGetMany(RESOURCE.profile, {
     filter: { election_id, candidate_id, status },
   });
   if (!profiles) {
-    return <Loading />;
+    return <SimpleLoading />;
   }
   return (
-    <ListBase>
+    <div>
       {profiles.map((b) => (
         <Box mb={2} key={b.id}>
           <Card key={b.id} variant="outlined">
@@ -55,6 +49,6 @@ export const ProfileCards = ({
           </Card>
         </Box>
       ))}
-    </ListBase>
+    </div>
   );
 };

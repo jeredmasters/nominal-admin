@@ -15,6 +15,7 @@ import {
   Select,
   MenuItem,
   SelectChangeEvent,
+  InputLabel,
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
@@ -28,6 +29,7 @@ import dayjs, { Dayjs } from "dayjs";
 export interface EditPanelProps extends PropsWithChildren {
   initialValue?: any;
   onSubmit?: (form: any) => void;
+  onChange?: (form: any) => void;
   onCancel?: () => void;
   onDelete?: () => void;
 }
@@ -35,6 +37,7 @@ export interface EditPanelProps extends PropsWithChildren {
 export const SimpleForm = ({
   initialValue,
   onSubmit,
+  onChange,
   onCancel,
   onDelete,
   children,
@@ -106,36 +109,61 @@ export const FormContext = createContext<IFormContext>({
   form: null,
   setForm: (v: any) => null,
 });
-interface InputProps extends PropsWithChildren {
+const useResolveProp = (
+  v?: boolean | ((form: any) => boolean),
+  fallback: boolean = false
+) => {
+  const { form, setForm } = useContext(FormContext);
+  if (typeof v === "boolean") {
+    return v;
+  }
+  if (typeof v === "function") {
+    return v(form);
+  }
+  return fallback;
+};
+export interface InputProps extends PropsWithChildren {
   field: string;
   label?: string;
   helperText?: string;
   defaultValue?: any;
+  hide?: (form: any) => boolean;
   xs?: number;
   sm?: number;
   md?: number;
   lg?: number;
 }
-const InputWrapper = ({
+export const InputWrapper = ({
   xs,
   sm,
   md,
   lg,
+  hide,
   defaultValue,
   field,
   helperText,
   children,
 }: InputProps) => {
   const { form, setForm } = useContext(FormContext);
+  const hidden = useResolveProp(hide);
   useEffect(() => {
-    defaultValue !== undefined && setForm({ ...form, [field]: defaultValue });
+    if (defaultValue !== undefined) {
+      console.log("setting default", field, defaultValue, form);
+      setForm((f: any) => ({ ...f, [field]: defaultValue }));
+    }
   }, [field, defaultValue]);
 
   if (!xs) xs = 12;
 
   const gridProps = { xs, sm, md, lg };
   return (
-    <Grid item {...gridProps} pb={1} pr={1}>
+    <Grid
+      item
+      {...gridProps}
+      pb={1}
+      pr={1}
+      sx={{ display: hidden ? "none" : undefined }}
+    >
       <FormControl fullWidth>
         {children}
         {helperText ? <FormHelperText>{helperText}</FormHelperText> : null}
@@ -155,7 +183,7 @@ export const TextInput = (props: TextInputProps) => {
     [form]
   );
   const handleChange: ChangeEventHandler<HTMLInputElement> = (e) => {
-    setForm({ ...form, [field]: e.target.value });
+    setForm((f: any) => ({ ...f, [field]: e.target.value }));
   };
   return (
     <InputWrapper {...props}>
@@ -170,9 +198,14 @@ export const TextInput = (props: TextInputProps) => {
     </InputWrapper>
   );
 };
+type StringEnum = { [key: string]: string };
 
 interface SelectInputProps extends InputProps {
-  options: Array<{ label: string; value: string }>;
+  options: Array<Option> | StringEnum | Array<string>;
+}
+interface Option {
+  label: string;
+  value: string;
 }
 export const SelectInput = (props: SelectInputProps) => {
   const { field, label, options } = props;
@@ -181,20 +214,36 @@ export const SelectInput = (props: SelectInputProps) => {
   const inputLabel = useMemo(() => label || fieldLabel(field), [field, label]);
   const rawValue = useMemo(
     () => (form && form[field] ? form[field] : ""),
-    [form]
+    [form, field]
   );
   const handleChange = (e: SelectChangeEvent<any>) => {
-    setForm({ ...form, [field]: e.target.value });
+    setForm((f: any) => ({ ...f, [field]: e.target.value }));
   };
+  const formatOptions: Array<Option> = useMemo(() => {
+    if (options.length === 0) {
+      return [];
+    }
+    if (Array.isArray(options)) {
+      return options.map(
+        (o): Option => (typeof o === "string" ? { value: o, label: o } : o)
+      );
+    }
+    return Object.keys(options).map(
+      (o): Option => ({ value: o, label: options[o] })
+    );
+  }, [options]);
   return (
     <InputWrapper {...props}>
+      <InputLabel id={`${field}-label`}>{inputLabel}</InputLabel>
+
       <Select
+        labelId={`${field}-label`}
         label={inputLabel}
         id={field}
         value={rawValue}
         onChange={handleChange}
       >
-        {options.map((o) => (
+        {formatOptions.map((o) => (
           <MenuItem key={o.value} value={o.value}>
             {o.label}
           </MenuItem>
@@ -216,7 +265,7 @@ export const DateInput = (props: DateInputProps) => {
   );
   const handleChange = (value: any) => {
     console.log("DatePicker", value);
-    setForm({ ...form, [field]: value });
+    setForm((f: any) => ({ ...f, [field]: value }));
   };
   return (
     <InputWrapper {...props}>

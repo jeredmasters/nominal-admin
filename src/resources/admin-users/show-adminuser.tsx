@@ -21,7 +21,7 @@ export const ShowAdminUser = () => {
           <DateField source="created_at" />
           <ReferenceField
             source="organisation_id"
-            reference="organisations"
+            reference=RESOURCE.organisation
             link="show"
           />
           <EditButton />

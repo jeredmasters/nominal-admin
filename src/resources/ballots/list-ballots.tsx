@@ -1,6 +1,5 @@
-import { TextField } from "react-admin";
-import { ListPanel } from "../../components/list-panel";
-import { IdField } from "../../components/IdField";
+import { RESOURCE } from "../../const/resources";
+import { SimpleTable } from "../../components/simple-table";
 
 export interface ListBallots {
   election_id?: string;
@@ -8,16 +7,9 @@ export interface ListBallots {
 }
 export const ListBallots = ({ election_id, candidate_id }: ListBallots) => {
   return (
-    <ListPanel
-      title="Ballots"
-      resource="ballots"
-      perPage={100}
-      filter={{ election_id, candidate_id }}
-    >
-      <IdField />
-      <TextField source="label" />
-      <TextField source="running_count" title="Candidates" label="Candidates" />
-      <TextField source="condition" />
-    </ListPanel>
+    <SimpleTable
+      resource={RESOURCE.ballot}
+      columns={["label", "running_count"]}
+    />
   );
 };

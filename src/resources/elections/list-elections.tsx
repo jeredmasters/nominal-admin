@@ -1,14 +1,12 @@
-import { TextField, DateField, TextInput, NumberField } from "react-admin";
-import { ListPanel } from "../../components/list-panel";
-import { IdField } from "../../components/IdField";
 import { useParams } from "react-router-dom";
 import { SimpleTable } from "../../components/simple-table";
+import { RESOURCE } from "../../const/resources";
 export const ListElections = () => {
   const { organisation_id } = useParams();
 
   return (
     <SimpleTable
-      resource="elections"
+      resource={RESOURCE.election}
       filter={{ organisation_id }}
       // filters={[<TextInput label="Label" source="label" alwaysOn />]}
       columns={[

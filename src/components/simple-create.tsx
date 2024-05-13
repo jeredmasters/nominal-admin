@@ -1,16 +1,15 @@
 import React, { PropsWithChildren, useContext, useMemo } from "react";
 import { useShowPath } from "../util";
 import { useNavigate } from "react-router-dom";
-import { useGetOne } from "../context/data.provider";
 import { ErrorPanel } from "./error";
 import { AuthContext } from "../context/auth.provider";
-import { SimpleLoading } from "./loading";
 import { SimpleForm } from "./simple-form";
+import { RESOURCE } from "../const/resources";
 
 export interface SimpleCreateProps extends PropsWithChildren {
-  resource: string;
+  resource: RESOURCE;
   initialValue?: any;
-  cancelPath?: string;
+  onCancel?: string | (() => void);
   onSuccess?: (value: any) => void;
 }
 
@@ -18,7 +17,7 @@ export const SimpleCreate = ({
   resource,
   initialValue,
   children,
-  cancelPath,
+  onCancel,
   onSuccess,
 }: SimpleCreateProps) => {
   const showPath = useShowPath(resource);
@@ -43,8 +42,8 @@ export const SimpleCreate = ({
     });
   };
   const handleCancel = useMemo(
-    () => (cancelPath ? () => navigate(cancelPath) : undefined),
-    [cancelPath]
+    () => (typeof onCancel === "string" ? () => navigate(onCancel) : onCancel),
+    [onCancel]
   );
 
   return (

@@ -19,7 +19,7 @@ export const CreateAdminUser = () => (
       <TextInput source="label" validate={[required()]} fullWidth />
       <ReferenceInput
         source="organisation_id"
-        reference="organisations"
+        reference=RESOURCE.organisation
         isRequired
         fullWidth
         disabled

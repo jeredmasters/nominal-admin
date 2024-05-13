@@ -1,59 +1,28 @@
-import {
-  Show,
-  TextField,
-  EditButton,
-  TabbedShowLayout,
-  useRecordContext,
-  ReferenceField,
-  Link,
-} from "react-admin";
 import { useParams } from "react-router-dom";
-import { IdField } from "../../components/IdField";
-import { useContext } from "react";
-import OpenInNewIcon from "@mui/icons-material/OpenInNew";
-import { AuthContext } from "../../context/auth.provider";
-import { Button } from "@mui/material";
+import { RESOURCE } from "../../const/resources";
+import { TabContainer, TabPanel } from "../../components/tab-panel";
+import { ShowSimple } from "../../components/show-blob";
+import { ErrorPanel } from "../../components/error";
 
-export const ShowEmailToken = () => {
-  const { id } = useParams();
-
-  if (!id) {
-    return "ERROR";
+export const ShowEmailTokenPage = () => {
+  const { email_token_id } = useParams();
+  if (!email_token_id) {
+    return (
+      <ErrorPanel text="Must have email_token_id" source="ShowEmailTokenPage" />
+    );
   }
-
   return (
-    <Show aside={<Aside />} actions={false}>
-      <TabbedShowLayout>
-        <TabbedShowLayout.Tab label="Email Token">
-          <IdField />
-          <TextField source="status" />
-          <ReferenceField source="voter_id" reference="voters" />
-          <ReferenceField source="election_id" reference="elections" />
-        </TabbedShowLayout.Tab>
-      </TabbedShowLayout>
-    </Show>
+    <TabContainer>
+      <TabPanel label="Email Token">
+        <ShowEmailToken email_token_id={email_token_id} />
+      </TabPanel>
+    </TabContainer>
   );
 };
 
-const Aside = () => {
-  const record = useRecordContext();
-  const { config } = useContext(AuthContext);
-
-  return (
-    <div style={{ width: 200, margin: "1em" }}>
-      <EditButton />
-      <br />
-      <br />
-
-      {config ? (
-        <Button
-          href={config.consumer_fe_url + "/email-token#" + record.id}
-          target="_blank"
-        >
-          <OpenInNewIcon />
-          Open Link
-        </Button>
-      ) : null}
-    </div>
-  );
+interface ShowEmailTokenProps {
+  email_token_id: string;
+}
+export const ShowEmailToken = ({ email_token_id }: ShowEmailTokenProps) => {
+  return <ShowSimple resource={RESOURCE.email_token} id={email_token_id} />;
 };

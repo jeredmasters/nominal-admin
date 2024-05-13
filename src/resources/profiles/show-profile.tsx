@@ -10,6 +10,7 @@ import { AuthContext } from "../../context/auth.provider";
 import { ErrorPanel } from "../../components/error";
 import { useGetOne } from "../../context/data.provider";
 import { SimpleLoading } from "../../components/loading";
+import { RESOURCE } from "../../const/resources";
 
 export const ShowProfile = () => {
   const { profile_id } = useParams();
@@ -17,7 +18,7 @@ export const ShowProfile = () => {
   if (!profile_id) {
     return <ErrorPanel text="Must have profile_id" source="ShowProfile" />;
   }
-  const profile = useGetOne("profiles", profile_id);
+  const profile = useGetOne(RESOURCE.profile, profile_id);
 
   if (!profile) {
     return <SimpleLoading />;
@@ -27,7 +28,7 @@ export const ShowProfile = () => {
       <TabPanel label="Profile">
         <ShowSimple
           id={profile_id}
-          resource="profiles"
+          resource={RESOURCE.profile}
           keys={["version", "status", "preferred_name", "rejected_reason"]}
           buttons={[
             {

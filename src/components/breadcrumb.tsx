@@ -1,17 +1,19 @@
 import { Typography, Breadcrumbs } from "@mui/material";
 import { useParams } from "react-router-dom";
-import { getRepresentation, useShowPath } from "../util";
+import { useShowPath } from "../util";
 import { Link } from "react-router-dom";
 import { useGetOne } from "../context/data.provider";
 import { useMemo } from "react";
+import { RESOURCE } from "../const/resources";
+import { getRepresentation } from "../util/resource";
 
 export interface IBreadCrum {
-  resource: string;
+  resource: RESOURCE;
   id: string;
 }
 
 interface BreadCrumbProps {
-  resource: string;
+  resource: RESOURCE;
   label?: string;
   breadcrumbs?: Array<IBreadCrum>;
 }
@@ -23,19 +25,19 @@ export const BreadCrumbs = ({ resource, label }: BreadCrumbProps) => {
   const breadcrumbs = useMemo(() => {
     const temp: IBreadCrum[] = [];
     if (organisation_id) {
-      temp.push({ resource: "organisations", id: organisation_id });
+      temp.push({ resource: RESOURCE.organisation, id: organisation_id });
     }
     if (election_id) {
-      temp.push({ resource: "elections", id: election_id });
+      temp.push({ resource: RESOURCE.election, id: election_id });
     }
     if (candidate_id) {
-      temp.push({ resource: "candidates", id: candidate_id });
+      temp.push({ resource: RESOURCE.candidate, id: candidate_id });
     }
     if (ballot_id) {
-      temp.push({ resource: "ballots", id: ballot_id });
+      temp.push({ resource: RESOURCE.ballot, id: ballot_id });
     }
     if (voter_id) {
-      temp.push({ resource: "voters", id: voter_id });
+      temp.push({ resource: RESOURCE.voter, id: voter_id });
     }
     return temp;
   }, [organisation_id, election_id, ballot_id, candidate_id, voter_id]);
@@ -50,7 +52,7 @@ export const BreadCrumbs = ({ resource, label }: BreadCrumbProps) => {
 };
 
 interface PageLabelProps {
-  resource: string;
+  resource: RESOURCE;
   id: string;
 }
 const PageLabel = ({ resource, id }: PageLabelProps) => {

@@ -1,40 +1,22 @@
 import * as React from "react";
-import {
-  Create,
-  SimpleForm,
-  TextInput,
-  DateInput,
-  required,
-  ReferenceInput,
-  SelectInput,
-  useRecordContext,
-  useCreateController,
-  useGetOne,
-} from "react-admin";
-import { Button, Typography } from "@mui/material";
-import { HiddenInput } from "../../components/hidden-input";
-import { CreatePanel } from "../../components/create-panel";
+import { RESOURCE } from "../../const/resources";
+import { SimpleCreate } from "../../components/simple-create";
+import { TextInput } from "../../components/simple-form";
+import { useGetOne } from "../../context/data.provider";
+import { ErrorPanel } from "../../components/error";
 
-export const CreateEmailToken = () => {
-  const { record } = useCreateController();
-  const { voter_id } = record || {};
-  const { data: voter } = useGetOne("voters", { id: voter_id });
+interface CreateEmailTokenProps {
+  voter_id: string;
+}
+export const CreateEmailToken = ({ voter_id }: CreateEmailTokenProps) => {
+  if (!voter_id) {
+    return <ErrorPanel text="Must have voter_id" source="CreateEmailToken" />;
+  }
+
+  const { data: voter } = useGetOne(RESOURCE.voter, voter_id);
   return (
-    <CreatePanel resource="email-tokens">
-      <TextInput
-        source="email"
-        fullWidth
-        disabled
-        defaultValue={voter ? voter.email : null}
-      />
-
-      <ReferenceInput
-        source="election_id"
-        reference="elections"
-        filter={{ voter_id }}
-      />
-
-      <TextInput source="voter_id" style={{ display: "none" }} />
-    </CreatePanel>
+    <SimpleCreate resource={RESOURCE.email_token}>
+      <TextInput field="email" defaultValue={voter ? voter.email : null} />
+    </SimpleCreate>
   );
 };

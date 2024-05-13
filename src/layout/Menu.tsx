@@ -1,8 +1,15 @@
-import { Box, Drawer } from "@mui/material";
+import {
+  Box,
+  Drawer,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+} from "@mui/material";
 
 import {
   DashboardMenuItem,
-  Link,
   MenuItemLink,
   MenuProps,
   useSidebarState,
@@ -12,33 +19,40 @@ import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import { useGetMany } from "../context/data.provider";
 import { SimpleLoading } from "../components/loading";
+import { RESOURCE } from "../const/resources";
+import { Link } from "react-router-dom";
 
 interface OrganisationMenuProps {
   open: boolean;
   setOpen: (v: boolean) => void;
 }
 export const OrganisationMenu = () => {
-  const { data: organisations } = useGetMany("organisations");
+  const { data: organisations } = useGetMany(RESOURCE.organisation);
   if (!organisations) {
     return <SimpleLoading />;
   }
   return (
     <Box>
-      {organisations
-        ? organisations.map((o) => (
-            <MenuItemLink
-              key={o.id}
-              to={`/organisations/${o.id}`}
-              state={{ _scrollToTop: true }}
-              primaryText={o.label}
-              dense={false}
-              leftIcon={<FiberManualRecordIcon />}
-              {
-                ...({} as any) /* strange requirement for onPointerLeaveCapture that causes FE errors */
-              }
-            />
-          ))
-        : null}
+      <List>
+        {organisations
+          ? organisations.map((o) => (
+              <ListItem key={o.id} disablePadding sx={{ width: "100%" }}>
+                <Link
+                  key={o.id}
+                  to={`/organisations/${o.id}`}
+                  style={{ width: "100%" }}
+                >
+                  <ListItemButton>
+                    <ListItemIcon>
+                      <FiberManualRecordIcon />
+                    </ListItemIcon>
+                    <ListItemText primary={o.label} />
+                  </ListItemButton>
+                </Link>
+              </ListItem>
+            ))
+          : null}
+      </List>
     </Box>
   );
 };
