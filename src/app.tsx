@@ -12,6 +12,7 @@ import { SimpleLayout } from "./layout/simple-layout";
 import { SimpleLoading } from "./components/loading";
 import { resourceToRoutes } from "./util/resource";
 import { ORG_ROUTES } from "./resource-routes";
+import { ModalProvider } from "./context/modal.provider";
 
 interface Redirect {
   to: string;
@@ -50,12 +51,16 @@ const router = createBrowserRouter([
     element: <Logout />,
   },
   {
-    element: <ProtectedRoutes />,
+    element: (
+      <ModalProvider>
+        <ProtectedRoutes />
+      </ModalProvider>
+    ),
     path: "/",
     children: [resourceToRoutes(ORG_ROUTES)],
   },
 ]);
 
 export const App = () => {
-  return <RouterProvider router={router} />;
+  return <RouterProvider router={router}></RouterProvider>;
 };

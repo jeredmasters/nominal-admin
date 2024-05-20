@@ -122,7 +122,7 @@ export const Login = () => {
               <TextInput
                 autoFocus
                 source="email"
-                label={translate("ra.auth.username")}
+                label="Email"
                 //disabled={loading}
                 validate={required()}
                 fullWidth
@@ -131,7 +131,7 @@ export const Login = () => {
             <Box sx={{ marginTop: "1em" }}>
               <TextInput
                 source="password"
-                label={translate("ra.auth.password")}
+                label="Password"
                 type="password"
                 //disabled={loading}
                 validate={required()}
@@ -148,7 +148,7 @@ export const Login = () => {
               fullWidth
             >
               {loading && <CircularProgress size={25} thickness={2} />}
-              {translate("ra.auth.sign_in")}
+              Signin
             </Button>
           </CardActions>
         </Card>

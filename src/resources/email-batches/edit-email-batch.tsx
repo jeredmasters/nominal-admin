@@ -6,18 +6,12 @@ import { RESOURCE } from "../../const/resources";
 import { useParamsOrState } from "../../util";
 import { ErrorPanel } from "../../components/error";
 import { SimpleEdit } from "../../components/simple-edit";
-
-export enum EMAIL_BATCH_STATUS {
-  DISABLED = "DISABLED",
-  ENABLED = "ENABLED",
-  SENT = "SENT",
-}
+import { ConditionInput } from "../../components/condition-editor";
+import { EMAIL_BATCH_STATUS } from "../../domain/emails";
 
 export const EditEmailBatchPage = () => {
   const email_batch_id = useParamsOrState("email_batch_id");
   const { state } = useLocation();
-
-  const voter_ids = state ? state.voter_ids : undefined;
 
   if (!email_batch_id) {
     return (
@@ -43,6 +37,8 @@ export const EditEmailBatch = ({ email_batch_id }: EditEmailBatchProps) => {
     <SimpleEdit resource={RESOURCE.email_batch} id={email_batch_id}>
       <TextInput field="voter_ids" />
       <SelectInput field="status" options={EMAIL_BATCH_STATUS} />
+      <ConditionInput field="condition" />
     </SimpleEdit>
   );
 };
+export { EMAIL_BATCH_STATUS };

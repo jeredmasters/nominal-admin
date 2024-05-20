@@ -6,3 +6,9 @@ export interface IOrganisation {
     "logo_sm_url": null,
     "logo_lg_url": null
 }
+
+export enum ORG_OWNER {
+    PRIVATE = 'PRIVATE',
+    PUBLIC = 'PUBLIC',
+    GOVERNMENT = 'GOVERNMENT'
+}

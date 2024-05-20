@@ -4,28 +4,18 @@ import { TabContainer, TabPanel } from "../../components/tab-panel";
 import { SimpleCreate } from "../../components/simple-create";
 import {
   DateInput,
+  DateTimeInput,
   SelectInput,
   TextInput,
 } from "../../components/simple-form";
 import { RESOURCE } from "../../const/resources";
 import { useParamsOrState } from "../../util";
 import { ErrorPanel } from "../../components/error";
-import { List, ListItem } from "@mui/material";
-import { ResourceLabel } from "../../components/resource-label";
 import { ConditionInput } from "../../components/condition-editor";
-
-export enum EMAIL_BATCH_STATUS {
-  DISABLED = "DISABLED",
-  ENABLED = "ENABLED",
-  SENT = "SENT",
-  SENDING = "SENDING",
-}
-
-export enum EMAIL_SCHEDULE {
-  DRAFT = "DRAFT",
-  SEND_NOW = "SEND_NOW",
-  SEND_LATER = "SEND_LATER",
-}
+import { CONDITION_TYPE } from "../../domain/conditions";
+import { EMAIL_SCHEDULE } from "../../domain/emails";
+import { EMAIL_BATCH_STATUS } from "./edit-email-batch";
+import { ModalContext } from "../../context/modal.provider";
 
 export const CreateEmailBatchPage = () => {
   const election_id = useParamsOrState("election_id");
@@ -58,37 +48,58 @@ export const CreateEmailBatch = ({
   election_id,
   voterIds,
 }: CreateEmailBatchProps) => {
+  const { setModal } = React.useContext(ModalContext);
+  const handleBeforeSubmit = (form: any, submit: (form: any) => void) => {
+    console.log("handleBeforeSubmit", form);
+    if (form.status === EMAIL_BATCH_STATUS.ENABLED) {
+      setModal({
+        title: "Send Emails Now?",
+        text: `By saving a batch with status = ${EMAIL_BATCH_STATUS.ENABLED}, the system will send the batch immediately after save. Change to ${EMAIL_BATCH_STATUS.DRAFT} if you do not with to send now.`,
+        onConfim: () => submit(form),
+      });
+    }
+  };
+  const statusHelperText = ({ status, schedule }: any) => {
+    switch (status) {
+      case EMAIL_BATCH_STATUS.DRAFT:
+        return "DRAFT batches will never send. You must change the status to ENABLED for any emails to be sent.";
+      case EMAIL_BATCH_STATUS.ENABLED:
+        if (schedule === EMAIL_SCHEDULE.SEND_NOW) {
+          return "ENABLED batches will send immediately after saving.";
+        }
+        return "ENABLED batches will be sent at the scheduled time.";
+    }
+  };
   return (
     <SimpleCreate
       resource={RESOURCE.email_batch}
-      initialValue={{ election_id, condition: { test: "value" } }}
+      onBeforeSubmit={handleBeforeSubmit}
+      initialValue={{
+        election_id,
+        status: EMAIL_BATCH_STATUS.DRAFT,
+        schedule: EMAIL_SCHEDULE.SEND_NOW,
+        where: voterIds
+          ? {
+              type: CONDITION_TYPE.PROP_EQUALS,
+              value: voterIds.join("\n"),
+              split_lines: true,
+            }
+          : undefined,
+      }}
     >
+      <SelectInput
+        field="status"
+        options={EMAIL_BATCH_STATUS}
+        helperText={statusHelperText}
+      />
       <SelectInput field="schedule" options={EMAIL_SCHEDULE} />
 
-      <DateInput
+      <DateTimeInput
         field="sent_at"
         hide={(form: any) => form.schedule !== EMAIL_SCHEDULE.SEND_LATER}
       />
-      {voterIds ? (
-        <VoterList voterIds={voterIds} />
-      ) : (
-        <ConditionInput field="condition" />
-      )}
-    </SimpleCreate>
-  );
-};
 
-interface VoterListProps {
-  voterIds: Array<string>;
-}
-const VoterList = ({ voterIds }: VoterListProps) => {
-  return (
-    <List>
-      {voterIds.map((v) => (
-        <ListItem key={v} disablePadding sx={{ width: "100%" }}>
-          <ResourceLabel resource={RESOURCE.voter} id={v} />
-        </ListItem>
-      ))}
-    </List>
+      <ConditionInput field="where" />
+    </SimpleCreate>
   );
 };

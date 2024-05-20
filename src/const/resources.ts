@@ -11,3 +11,10 @@ export enum RESOURCE {
     voter_digest = 'voter-digests',
     admin_users = 'admin_users',
 }
+
+export enum ACTION {
+    LIST = "LIST",
+    SHOW = "SHOW",
+    EDIT = "EDIT",
+    CREATE = "CREATE",
+}

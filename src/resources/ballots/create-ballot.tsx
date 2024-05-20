@@ -9,6 +9,8 @@ import { TabContainer, TabPanel } from "../../components/tab-panel";
 import { useLocation } from "react-router-dom";
 import { RESPONSE_TYPE } from "../../const/elections";
 import { RESOURCE } from "../../const/resources";
+import { CheckInput } from "../../components/simple-form/check-input";
+import { ConditionInput } from "../../components/condition-editor";
 
 export const CreateBallot = () => {
   const { state } = useLocation();
@@ -18,23 +20,18 @@ export const CreateBallot = () => {
         <SimpleCreate resource={RESOURCE.ballot} initialValue={state}>
           <TextInput field="label" sm={8} />
           <SelectInput field="response_type" options={RESPONSE_TYPE} sm={4} />
-          <DateInput
-            label="Opens At"
-            field="opens_at"
-            defaultValue={new Date()}
-            sm={6}
+          <CheckInput
+            field="shuffle_candidates"
+            defaultValue={true}
+            hide={(f) =>
+              ![RESPONSE_TYPE.PREFERENCE, RESPONSE_TYPE.RANKING].includes(
+                f.response_type
+              )
+            }
+            sm={12}
           />
-          <DateInput
-            label="Closes At"
-            field="closes_at"
-            defaultValue={new Date().setDate(new Date().getDate() + 30)}
-            sm={6}
-          />
-          <TextInput
-            field="short_description"
-            multiline={4}
-            label="Short description"
-          />
+          <TextInput field="short_description" multiline={4} />
+          <ConditionInput field="voter_filter" />
         </SimpleCreate>
       </TabPanel>
     </TabContainer>

@@ -17,9 +17,6 @@ export const ShowVoterPage = () => {
     return <ErrorPanel text="Must have voter_id" source="ShowVoter" />;
   }
 
-  const handleNewTag = () => {
-    console.log("TODO: refresh table");
-  };
   return (
     <TabContainer>
       <TabPanel label="Voter">
@@ -33,13 +30,9 @@ export const ShowVoterPage = () => {
           buttons={[
             {
               label: "Add Tag",
-              modal: (onClose) => (
-                <AddTagForm
-                  onClose={onClose}
-                  voter_id={voter_id}
-                  onNewTag={handleNewTag}
-                />
-              ),
+              modal: (onClose) => ({
+                content: <AddTagForm onClose={onClose} voter_id={voter_id} />,
+              }),
             },
           ]}
           onRowClick={false}

@@ -14,6 +14,13 @@ const colorMap: { [status: string]: color } = {
   CANCELLED: "warning",
   APPROVED: "success",
   DEPRECATED: "default",
+
+  // election status
+  DRAFT: "secondary",
+  NOMINATIONS: "info",
+  RUNNING: "error",
+  VOTING: "error",
+  COMPLETE: "success",
 };
 interface StatusChipProps {
   status: string;

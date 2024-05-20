@@ -11,6 +11,7 @@ export interface SimpleCreateProps extends PropsWithChildren {
   initialValue?: any;
   onCancel?: string | (() => void);
   onSuccess?: (value: any) => void;
+  onBeforeSubmit?: (form: any, submit: (form: any) => void) => void;
 }
 
 export const SimpleCreate = ({
@@ -19,6 +20,7 @@ export const SimpleCreate = ({
   children,
   onCancel,
   onSuccess,
+  onBeforeSubmit,
 }: SimpleCreateProps) => {
   const showPath = useShowPath(resource);
   const navigate = useNavigate();
@@ -30,7 +32,7 @@ export const SimpleCreate = ({
     );
   }
 
-  const handleSubmit = (form: any) => {
+  const submit = (form: any) => {
     fetch(`/${resource}`, { method: "post", body: form }).then((response) => {
       if (onSuccess) {
         onSuccess(response.json);
@@ -40,6 +42,14 @@ export const SimpleCreate = ({
         navigate(path);
       }
     });
+  };
+
+  const handleSubmit = (form: any) => {
+    if (onBeforeSubmit) {
+      onBeforeSubmit(form, submit);
+    } else {
+      submit(form);
+    }
   };
   const handleCancel = useMemo(
     () => (typeof onCancel === "string" ? () => navigate(onCancel) : onCancel),

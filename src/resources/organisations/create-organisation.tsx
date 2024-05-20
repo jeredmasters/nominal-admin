@@ -1,10 +1,9 @@
 import * as React from "react";
 import { TabContainer, TabPanel } from "../../components/tab-panel";
-import { useLocation } from "react-router-dom";
 import { SimpleCreate } from "../../components/simple-create";
-import { TextInput } from "../../components/simple-form";
-import { ErrorPanel } from "../../components/error";
+import { SelectInput, TextInput } from "../../components/simple-form";
 import { RESOURCE } from "../../const/resources";
+import { ORG_OWNER } from "../../domain/organisation";
 
 export const CreateOrganisation = () => {
   return (
@@ -12,6 +11,8 @@ export const CreateOrganisation = () => {
       <TabPanel label="New Organisation">
         <SimpleCreate resource={RESOURCE.organisation}>
           <TextInput field="label" />
+          <SelectInput field="owner" options={ORG_OWNER} />
+          <TextInput field="country" />
         </SimpleCreate>
       </TabPanel>
     </TabContainer>

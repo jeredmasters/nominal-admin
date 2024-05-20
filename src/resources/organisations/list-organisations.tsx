@@ -15,5 +15,10 @@ export const ListOrganisationsPage = () => {
 };
 
 export const ListOrganisations = () => {
-  return <SimpleTable resource={RESOURCE.organisation} columns={["label"]} />;
+  return (
+    <SimpleTable
+      resource={RESOURCE.organisation}
+      columns={["label", "owner", "country"]}
+    />
+  );
 };

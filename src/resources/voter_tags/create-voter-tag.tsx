@@ -31,7 +31,7 @@ export const CreateVoterTag = ({ voter_id }: CreateVoterTagProps) => {
 };
 
 interface AddTagFormProps {
-  voter_id: string;
+  voter_id: string | Array<string>;
   onClose?: () => void;
   onNewTag?: () => void;
 }

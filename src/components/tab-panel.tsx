@@ -56,7 +56,7 @@ export const TabContainer = ({
   );
 
   useEffect(() => {
-    if (hashTabs) {
+    if (hashTabs !== false) {
       const indexOrId = hash.replace("#", "");
 
       const index = tabArray.findIndex(
@@ -75,7 +75,7 @@ export const TabContainer = ({
   const child = useMemo(() => tabArray[tabIndex], [tabArray, tabIndex]);
 
   const handleChange = (event: React.SyntheticEvent, newIndex: number) => {
-    if (hashTabs) {
+    if (hashTabs !== false) {
       const h = getId(tabArray[newIndex], newIndex);
       navigate("#" + h);
     } else {

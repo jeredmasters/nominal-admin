@@ -35,7 +35,7 @@ export const ShowOrganisation = ({
     <ShowSimple
       resource={RESOURCE.organisation}
       id={organisation_id}
-      keys={["label"]}
+      keys={["label", "owner", "country"]}
     />
   );
 };

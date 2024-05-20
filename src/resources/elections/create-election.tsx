@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom";
 import { SimpleCreate } from "../../components/simple-create";
 import {
   DateInput,
+  DateTimeInput,
   SelectInput,
   TextInput,
 } from "../../components/simple-form";
@@ -31,7 +32,9 @@ export const CreateElectionPage = () => {
   }
   return (
     <TabContainer>
-      <TabPanel label="Create Election"></TabPanel>
+      <TabPanel label="Create Election">
+        <CreateElection organisation_id={organisation_id} />
+      </TabPanel>
     </TabContainer>
   );
 };
@@ -45,26 +48,26 @@ export const CreateElection = ({ organisation_id }: CreateElectionProps) => {
       resource={RESOURCE.election}
       initialValue={{ organisation_id }}
     >
-      <TextInput field="label" sm={8} />
+      <TextInput field="label" sm={12} />
       <SelectInput
         field="status"
-        sm={4}
+        sm={6}
         options={ELECTION_STATUS}
         defaultValue={ELECTION_STATUS.DRAFT}
       />
       <SelectInput
         field="mode"
-        sm={4}
+        sm={6}
         options={ELECTION_MODE}
         defaultValue={ELECTION_MODE.MANUAL}
       />
-      <DateInput
+      <DateTimeInput
         label="Opens At"
         field="opens_at"
         defaultValue={new Date()}
         sm={6}
       />
-      <DateInput
+      <DateTimeInput
         label="Closes At"
         field="closes_at"
         defaultValue={getFutureDate(30)}
