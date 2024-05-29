@@ -9,7 +9,9 @@ export enum RESOURCE {
     email_batch = 'email-batches',
     voter_tag = 'voter-tags',
     voter_digest = 'voter-digests',
-    admin_users = 'admin_users',
+    admin_users = 'admin-users',
+    ticket = 'tickets',
+    ticket_messages = 'ticket-messages',
 }
 
 export enum ACTION {

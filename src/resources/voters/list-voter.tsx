@@ -33,7 +33,7 @@ export const ListVoters = ({ election_id }: ListVotersProps) => {
     <SimpleTable
       resource={RESOURCE.voter}
       filter={{ election_id }}
-      columns={["first_name", "last_name", "email"]}
+      columns={["first_name", "last_name", "email", "status"]}
       selectActions={[
         {
           label: "Send Batch Invite",

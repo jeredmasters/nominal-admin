@@ -7,6 +7,7 @@ import { ShowSimple } from "../../components/show-blob";
 import { ErrorPanel } from "../../components/error";
 import { ListEmailBatchs } from "../email-batches/list-email-batches";
 import { RESOURCE } from "../../const/resources";
+import { ListTickets } from "../tickets/list-ticket";
 
 export const ShowElectionPage = () => {
   const { election_id } = useParams();
@@ -31,6 +32,9 @@ export const ShowElectionPage = () => {
       </TabPanel>
       <TabPanel label="Email Batch" id="email-batches">
         <ListEmailBatchs election_id={election_id} />
+      </TabPanel>
+      <TabPanel label="Tickets" id="tickets">
+        <ListTickets election_id={election_id} />
       </TabPanel>
     </TabContainer>
   );

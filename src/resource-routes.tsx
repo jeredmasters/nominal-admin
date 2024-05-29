@@ -29,6 +29,10 @@ import {
 } from "./resources/email-tokens/create-email-token";
 import { EditBallotPage } from "./resources/ballots/edit-ballot";
 import { EditCandidatePage } from "./resources/candidates/edit-candidate";
+import { ListTickets, ListTicketsPage } from "./resources/tickets/list-ticket";
+import { ShowTicketPage } from "./resources/tickets/show-ticket";
+import { CreateTicket } from "./resources/tickets/create-ticket";
+import { EditTicket } from "./resources/tickets/edit-ticket";
 
 export interface ResourceRoute {
   resource: RESOURCE;
@@ -80,6 +84,14 @@ export const ORG_ROUTES: ResourceRoute = {
               list: <ListEmailTokens />,
               show: <ShowEmailTokenPage />,
               create: <CreateEmailTokenPage />,
+            },
+            {
+              resource: RESOURCE.ticket,
+              idName: "ticket_id",
+              list: <ListTicketsPage />,
+              show: <ShowTicketPage />,
+              create: <CreateTicket />,
+              edit: <EditTicket />,
             },
           ],
         },

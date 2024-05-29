@@ -21,6 +21,11 @@ const colorMap: { [status: string]: color } = {
   RUNNING: "error",
   VOTING: "error",
   COMPLETE: "success",
+
+  // voter status
+  INACTIVE: "default",
+  VIEWED: "info",
+  SUBMITTED: "success",
 };
 interface StatusChipProps {
   status: string;
